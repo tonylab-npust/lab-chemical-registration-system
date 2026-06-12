@@ -186,8 +186,36 @@
                 headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
                 buttonText: { today: '今天', month: '月', week: '週' },
                 events: function(fetchInfo, successCallback, failureCallback) {
-                    fetch(`${API_URL}?action=getBookings`).then(res => res.json()).then(data => successCallback(data)).catch(err => failureCallback(err));
-                },
+    fetch(`${API_URL}?action=getBookings`)
+    .then(res => res.json())
+    .then(data => {
+        // 🎨 在這裡定義每一間實驗室的專屬顏色 (您可以自己修改喜歡的色碼)
+        const labColors = {
+            'RE126': '#f97316',   // 溫暖橘
+            'RE130': '#3b82f6',   // 活力藍
+            'RE132': '#ef4444',   // 警示紅
+            'RE220-1': '#8b5cf6', // 質感紫
+            'RE306': '#ec4899',   // 甜美粉
+            'RE308': '#10b981',   // 森林綠
+            'AR303': '#06b6d4'    // 蒂芬妮藍
+        };
+
+        // 自動遍歷每一筆預約，根據實驗室名稱塞入對應顏色
+        const coloredEvents = data.map(event => {
+            // 這裡會去抓資料庫裡的實驗室名稱 (例如 "RE308")
+            const labName = event.extendedProps.lab || (event.title ? event.title.split(" - ")[0] : "");
+            
+            return {
+                ...event,
+                backgroundColor: labColors[labName] || '#64748b', // 設定背景顏色 (如果沒對上就用灰色)
+                borderColor: labColors[labName] || '#64748b'     // 設定邊框顏色
+            };
+        });
+        
+        successCallback(coloredEvents);
+    })
+    .catch(err => failureCallback(err));
+},
                 eventClick: function(info) {
                     var p = info.event.extendedProps;
                     alert(`【預約詳情】\n實驗室：${info.event.title}\n使用者：${p.user} (${p.id})\n使用用途：${p.purpose || '無'}\n儀器：${p.device}\n備註：${p.note || '無'}`);
