@@ -276,38 +276,42 @@ function addDeviceRow() {
 
         // 送出表單一：實驗室預約
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('bookBtn'); btn.disabled = true; btn.textContent = "預約中...";
-            let selectedDevices = [];
-            document.querySelectorAll('.device-input').forEach(input => { if (input.value.trim()) selectedDevices.push(input.value.trim()); });
+    e.preventDefault();
+    const btn = document.getElementById('bookBtn'); btn.disabled = true; btn.textContent = "預約中...";
+    
+    // 收集所有自行輸入的儀器
+    let selectedDevices = [];
+    document.querySelectorAll('.device-input').forEach(input => { 
+        if (input.value.trim()) selectedDevices.push(input.value.trim()); 
+    });
 
-            fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({
-                    action: "addLabBooking",
-                    data: {
-                        studentId: document.getElementById('bookingId').value,
-                        name: document.getElementById('bookingName').value,
-                        lab: document.getElementById('lab').value,
-                        start: document.getElementById('start').value,
-                        end: document.getElementById('end').value,
-                        device: selectedDevices.join("、"),
-                        purpose: document.getElementById('bookingPurpose').value,
-                        note: document.getElementById('bookingNote').value 
-                    }
-                })
-            }).then(res => res.json()).then(res => {
-                alert(res.message);
-                if(res.status === "success") { 
-                    document.getElementById('bookingForm').reset(); 
-                    document.getElementById('bookingPurpose').value = ''; 
-                    document.getElementById('bookingNote').value = ''; 
-                    calendar.refetchEvents(); 
-                    document.getElementById('deviceRowsContainer').innerHTML = ''; 
-                    addDeviceRow(); 
-                }
-            }).finally(() => { btn.disabled = false; btn.textContent = "送出預約申請"; });
-        });
+    fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({
+            action: "addLabBooking",
+            data: {
+                studentId: document.getElementById('bookingId').value,
+                name: document.getElementById('bookingName').value,
+                lab: document.getElementById('lab').value,
+                start: document.getElementById('start').value,
+                end: document.getElementById('end').value,
+                device: selectedDevices.join("、"),                  // F欄：使用儀器
+                purpose: document.getElementById('bookingPurpose').value, // G欄：使用用途
+                note: document.getElementById('bookingNote').value       // H欄：預約備註
+            }
+        })
+    }).then(res => res.json()).then(res => {
+        alert(res.message);
+        if(res.status === "success") { 
+            document.getElementById('bookingForm').reset(); 
+            document.getElementById('bookingPurpose').value = ''; 
+            document.getElementById('bookingNote').value = ''; 
+            calendar.refetchEvents(); 
+            document.getElementById('deviceRowsContainer').innerHTML = ''; 
+            addDeviceRow(); 
+        }
+    }).finally(() => { btn.disabled = false; btn.textContent = "送出預約申請"; });
+});
 
         // 送出表單二：藥劑消耗
         document.getElementById('chemForm').addEventListener('submit', function(e) {
