@@ -8,9 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
     <style>
-        .fc { height: 500px; background: white; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .low-stock { color: #ef4444; font-weight: bold; animation: pulse 2s infinite; }
-    </style>
+        .fc { height: 100%; background: white; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .low-stock { color: #ef4444; font-weight: bold; animation: pulse 2s infinite; }
+</style>
 </head>
 <body class="bg-slate-100 min-h-screen text-gray-800 pb-12">
 
@@ -44,13 +44,16 @@
             <div class="border-b pb-3 mb-4">
                 <h2 class="text-2xl font-bold text-slate-700 flex items-center">📅 實驗室預約使用登記</h2>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <form id="bookingForm" class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="grid grid-cols-2 gap-2">
-                            <div><label class="block text-sm font-bold text-slate-600">學號 <span class="text-red-500">*</span></label><input type="text" id="bookingId" required placeholder="如：B10919024" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
-                            <div><label class="block text-sm font-bold text-slate-600">姓名 <span class="text-red-500">*</span></label><input type="text" id="bookingName" required placeholder="如：李芷玲" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
-                        </div>
+           <!-- 🚀 在 grid 加上 items-stretch，並在表單與月曆外框加上 h-full -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+    <form id="bookingForm" class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 flex flex-col justify-between h-full">
+        <!-- 中間表單內容不用動... -->
+    </form>
+    
+    <div class="lg:col-span-2 h-full">
+        <div id="calendar" class="h-full"></div>
+    </div>
+</div>
                         <div>
                             <label class="block text-sm font-bold text-slate-600">預使用的實驗室 <span class="text-red-500">*</span></label>
                             <select id="lab" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
@@ -185,7 +188,7 @@
                     const labName = p.lab || info.event.title.split(" - ")[0];
                     
                     document.getElementById('modalLab').textContent = labName;
-                    document.getElementById('modalUser').textContent = `${p.user} (${p.id})`;
+                    document.getElementById('modalUser').textContent = p.user;
                     document.getElementById('modalStart').textContent = startStr;
                     document.getElementById('modalEnd').textContent = endStr;
                     document.getElementById('modalPurpose').textContent = p.purpose || "無";
@@ -212,10 +215,11 @@
         function handleCancelBooking(studentId, lab, rawStart, rawEnd) {
             var inputId = prompt("⚠️ 安全驗證：\n請輸入這筆預約的「登記人學號」以確認取消此時段：");
             if (inputId === null) return; 
-            if (inputId.trim() !== studentId) {
-                alert("❌ 取消失敗：輸入的學號與該預約原登記人不符！請勿亂刪別人的時段。");
-                return;
-            }
+            // 🚀 無視大小寫，避免手殘打成小寫 m 導致刪不掉
+if (inputId.trim().toUpperCase() !== studentId.toUpperCase()) {
+    alert("❌ 取消失敗：輸入的學號與該預約原登記人不符！請勿亂刪別人的時段！");
+    return;
+}
             const formatToLocalISO = (dateObj) => {
                 if (!dateObj) return "";
                 let tzOffset = dateObj.getTimezoneOffset() * 60000;
