@@ -69,9 +69,9 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <div><label class="block text-sm font-bold text-slate-600">開始時間</label><input type="datetime-local" id="start" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
                             <div><label class="block text-sm font-bold text-slate-600">結束時間</label><input type="datetime-local" id="end" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
-                      <div>
-    <label class="block text-sm font-bold text-slate-600">📝 使用用途</label>
-    <input type="text" id="bookingPurpose" placeholder="如：木質材料熱壓、纖維素純化實驗" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+                      <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+    <label class="block text-sm font-bold text-slate-600">📝 預約使用用途 <span class="text-red-500">*</span></label>
+    <input type="text" id="bookingPurpose" placeholder="如：纖維純化實驗、萃取精油etc." class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
 </div>
                         </div>
                         <div class="bg-slate-200/60 p-3 rounded-lg space-y-2 border border-slate-300">
@@ -171,9 +171,9 @@
                     fetch(`${API_URL}?action=getBookings`).then(res => res.json()).then(data => successCallback(data)).catch(err => failureCallback(err));
                 },
                 eventClick: function(info) {
-                    var p = info.event.extendedProps;
-                    alert(`【預約詳情】\n實驗室：${info.event.title}\n使用者：${p.user} (${p.id})\n儀器：${p.device}`);
-                }
+    var p = info.event.extendedProps;
+    alert(`【預約詳情】\n實驗室：${info.event.title}\n使用者：${p.user} (${p.id})\n使用用途：${p.purpose || '無'}\n儀器：${p.device}`);
+}
             });
             calendar.render();
         }
