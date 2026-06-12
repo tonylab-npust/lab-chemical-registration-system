@@ -245,28 +245,21 @@
             }).catch(err => alert("載入資料庫失敗，請確認後台權限已開並且網址正確。"));
         }
 
-        // 🚀 智慧防呆：儀器全部改為強制下拉選單，且預設 required
-        function addDeviceRow() {
-            const container = document.getElementById('deviceRowsContainer');
-            const rowId = 'device_row_' + Date.now();
-            const div = document.createElement('div');
-            div.id = rowId;
-            div.className = "flex space-x-2 items-center device-row bg-white p-1.5 rounded shadow-sm border border-slate-200";
-            div.innerHTML = `
-                <select required class="device-input flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs text-slate-700 font-medium">
-                    <option value="" disabled selected>-- 請選擇儀器 --</option>
-                    <option value="烘箱">烘箱</option>
-                    <option value="天平">天平</option>
-                    <option value="氣相層析儀(GC)">氣相層析儀(GC)</option>
-                    <option value="熱壓機">熱壓機</option>
-                    <option value="FTIR">FTIR</option>
-                    <option value="TGA">TGA</option>
-                    <option value="萬能材料試驗機(UTM)">萬能材料試驗機(UTM)</option>
-                </select>
-                <button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="document.getElementById('${rowId}').remove()">✕</button>
-            `;
-            container.appendChild(div);
-        }
+        
+function addDeviceRow() {
+    const container = document.getElementById('deviceRowsContainer');
+    const rowId = 'device_row_' + Date.now();
+    const div = document.createElement('div');
+    div.id = rowId;
+    div.className = "flex space-x-2 items-center device-row bg-white p-1.5 rounded shadow-sm border border-slate-200";
+    
+    // 💡 關鍵點：改回原來的 <input type="text">，並保留 required 確保必填
+    div.innerHTML = `
+        <input type="text" required class="device-input flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs" placeholder="如：烘箱、天平、熱壓機etc.">
+        <button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="document.getElementById('${rowId}').remove()">✕</button>
+    `;
+    container.appendChild(div);
+}
 
         function addChemRow() {
             const container = document.getElementById('chemRowsContainer');
