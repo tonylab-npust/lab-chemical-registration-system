@@ -8,13 +8,15 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
     <style>
-        .fc { height: 100%; background: white; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-    .low-stock { color: #ef4444; font-weight: bold; animation: pulse 2s infinite; }
-</style>
+        /* 🚀 鎖死月曆高度，不讓它亂撐壞版面 */
+        .fc { height: 680px; background: white; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .low-stock { color: #ef4444; font-weight: bold; animation: pulse 2s infinite; }
+    </style>
 </head>
 <body class="bg-slate-100 min-h-screen text-gray-800 pb-12">
 
     <div class="container mx-auto px-4 py-6 max-w-7xl">
+        
         <header class="mb-6 text-center">
             <h1 class="text-3xl font-extrabold text-gray-900">實驗室管理系統</h1>
         </header>
@@ -44,16 +46,13 @@
             <div class="border-b pb-3 mb-4">
                 <h2 class="text-2xl font-bold text-slate-700 flex items-center">📅 實驗室預約使用登記</h2>
             </div>
-           <!-- 🚀 在 grid 加上 items-stretch，並在表單與月曆外框加上 h-full -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-    <form id="bookingForm" class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 flex flex-col justify-between h-full">
-        <!-- 中間表單內容不用動... -->
-    </form>
-    
-    <div class="lg:col-span-2 h-full">
-        <div id="calendar" class="h-full"></div>
-    </div>
-</div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <form id="bookingForm" class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div><label class="block text-sm font-bold text-slate-600">學號 <span class="text-red-500">*</span></label><input type="text" id="bookingId" required placeholder="如：B10919024" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
+                            <div><label class="block text-sm font-bold text-slate-600">姓名 <span class="text-red-500">*</span></label><input type="text" id="bookingName" required placeholder="如：李芷玲" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
+                        </div>
                         <div>
                             <label class="block text-sm font-bold text-slate-600">預使用的實驗室 <span class="text-red-500">*</span></label>
                             <select id="lab" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
@@ -68,7 +67,7 @@
                         <div><label class="block text-sm font-bold text-slate-600">📝 預約使用用途 <span class="text-red-500">*</span></label><input type="text" id="bookingPurpose" required placeholder="如：纖維純化實驗、萃取精油etc." class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
                         <div><label class="block text-sm font-bold text-slate-600">💬 預約備註 (選填)</label><textarea id="bookingNote" placeholder="例如：會借用到XX實驗室使用etc..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea></div>
                         <div class="bg-slate-200/60 p-3 rounded-lg space-y-2 border border-slate-300">
-                            <label class="block text-sm font-bold text-slate-700">🛠️ 使用儀器 (如使用多項儀器請多開欄位填寫) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-bold text-slate-700">🛠️ 使用儀器 (如有多項請多開欄位填寫) <span class="text-red-500">*</span></label>
                             <div id="deviceRowsContainer" class="space-y-2"></div>
                             <button type="button" onclick="addDeviceRow()" class="w-full bg-white border border-slate-400 text-slate-700 text-xs font-bold py-1.5 px-3 rounded hover:bg-slate-50 transition shadow-sm">➕ 新增一台儀器</button>
                         </div>
@@ -132,10 +131,8 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div id="detailsModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 transform transition-all scale-100">
+    </div> <div id="detailsModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
             <div class="flex justify-between items-center border-b pb-2 border-slate-100">
                 <h3 class="text-xl font-extrabold text-slate-800 flex items-center">📅 預約詳細資訊</h3>
                 <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold transition">✕</button>
@@ -188,7 +185,7 @@
                     const labName = p.lab || info.event.title.split(" - ")[0];
                     
                     document.getElementById('modalLab').textContent = labName;
-                    document.getElementById('modalUser').textContent = p.user;
+                    document.getElementById('modalUser').textContent = p.user; // 🔥 已隱藏學號，變成隱形密碼
                     document.getElementById('modalStart').textContent = startStr;
                     document.getElementById('modalEnd').textContent = endStr;
                     document.getElementById('modalPurpose').textContent = p.purpose || "無";
@@ -196,7 +193,8 @@
                     document.getElementById('modalNote').textContent = p.note || "無";
 
                     document.getElementById('modalCancelBtn').onclick = function() {
-                        handleCancelBooking(p.id, labName, info.event.start, info.event.end);
+                        // 🚀 傳遞正確的學號與 row 給刪除函式
+                        handleCancelBooking(p.id, p.row);
                     };
                     const modal = document.getElementById('detailsModal');
                     modal.classList.remove('hidden');
@@ -212,24 +210,26 @@
             modal.classList.add('hidden');
         }
 
-        function handleCancelBooking(studentId, lab, rawStart, rawEnd) {
+        // 🚀 全新的秒殺取消呼叫器 (透過 Row 行號定位)
+        function handleCancelBooking(studentId, rowNum) {
             var inputId = prompt("⚠️ 安全驗證：\n請輸入這筆預約的「登記人學號」以確認取消此時段：");
             if (inputId === null) return; 
-            // 🚀 無視大小寫，避免手殘打成小寫 m 導致刪不掉
-if (inputId.trim().toUpperCase() !== studentId.toUpperCase()) {
-    alert("❌ 取消失敗：輸入的學號與該預約原登記人不符！請勿亂刪別人的時段！");
-    return;
-}
-            const formatToLocalISO = (dateObj) => {
-                if (!dateObj) return "";
-                let tzOffset = dateObj.getTimezoneOffset() * 60000;
-                return (new Date(dateObj.getTime() - tzOffset)).toISOString().slice(0, 16);
-            };
+            
+            // 無視大小寫，強硬比對！
+            if (inputId.trim().toUpperCase() !== studentId.trim().toUpperCase()) {
+                alert("❌ 取消失敗：輸入的學號與該預約原登記人不符！請勿亂刪別人的時段。");
+                return;
+            }
+            
             const cancelBtn = document.getElementById('modalCancelBtn');
             cancelBtn.disabled = true; cancelBtn.textContent = "正在同步取消中...";
+            
             fetch(API_URL, {
                 method: "POST",
-                body: JSON.stringify({ action: "deleteLabBooking", data: { studentId: studentId, lab: lab, start: formatToLocalISO(rawStart), end: formatToLocalISO(rawEnd) } })
+                body: JSON.stringify({ 
+                    action: "deleteLabBooking", 
+                    data: { studentId: studentId, row: rowNum } // 🔥 直接傳送 Excel 的第幾列給後台
+                })
             }).then(res => res.json()).then(res => {
                 alert(res.message);
                 if (res.status === "success") { closeDetailsModal(); calendar.refetchEvents(); }
@@ -272,7 +272,7 @@ if (inputId.trim().toUpperCase() !== studentId.toUpperCase()) {
             const rowDiv = document.createElement('div');
             rowDiv.className = "flex space-x-2 items-center chem-row bg-white p-2 rounded-lg shadow-sm border border-slate-200";
             let optionsHtml = '<option value="">-- 選擇藥劑 --</option>';
-            globalChemData.forEach(c => { optionsHtml += `<option value="${c.name}">${c.name}${c.unit ? ` (${c.unit})`:''}</option>`; });
+            globalChemData.forEach(c => { optionsHtml += `<option value="${c.name}">${c.name}${c.unit ? \` (${c.unit})\`:''}</option>`; });
             rowDiv.innerHTML = `<select class="chem-select flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs" required>${optionsHtml}</select><input type="number" step="any" required class="chem-amount w-16 p-1.5 border border-gray-300 rounded bg-white text-xs" placeholder="數量"><button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="this.parentElement.remove()">✕</button>`;
             container.appendChild(rowDiv);
         }
