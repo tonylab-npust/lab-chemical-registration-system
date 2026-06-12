@@ -29,10 +29,10 @@
                     <li>使用者應於實驗前完成預約登記，並於實驗結束後主動申報藥劑使用情形。</li>
                     <li>預約登記與藥劑申報為兩項獨立作業，請分別完成。</li>
                     <li>藥劑名稱一律以系統下拉選單之標準資料為準，若未找到對應藥劑，請聯繫管理人員新增，並於備註欄上說明。</li>
-                    <li>消耗量請填寫「純數字」即可，系統選單已自動帶出對應單位（填寫單位以mL與g為準）。</li>
+                    <li>消耗量請填寫「純數字」即可，系統選單已自動帶出對應單位。</li>
                     <li>若領用高危害性化學品，務必於 「📝 備註欄」 詳實說明實驗用途。</li>
                     <li>使用後請確認藥品已妥善封存並放回指定位置。</li>
-                    <li>發現藥品不足、變質、洩漏或異常情形，請立即通知實驗室管理人員。</li>
+                    <li>發現藥品變質、洩漏或異常情形，請立即通知實驗室管理人員。</li>
                     <li class="text-red-600 font-semibold">⚠️ 未依規定完成登錄或申報者，實驗室有權暫停其藥品及儀器使用權限。</li>
                 </ul>
             </div>
@@ -69,6 +69,10 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             <div><label class="block text-sm font-bold text-slate-600">開始時間</label><input type="datetime-local" id="start" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
                             <div><label class="block text-sm font-bold text-slate-600">結束時間</label><input type="datetime-local" id="end" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
+                      <div>
+    <label class="block text-sm font-bold text-slate-600">📝 使用用途</label>
+    <input type="text" id="bookingPurpose" placeholder="如：木質材料熱壓、纖維素純化實驗" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+</div>
                         </div>
                         <div class="bg-slate-200/60 p-3 rounded-lg space-y-2 border border-slate-300">
                             <label class="block text-sm font-bold text-slate-700">🛠️ 預使用儀器 (可多填) 如有使用多台儀器請多開欄位填寫</label>
@@ -76,7 +80,7 @@
                             <button type="button" onclick="addDeviceRow()" class="w-full bg-white border border-slate-400 text-slate-700 text-xs font-bold py-1.5 px-3 rounded hover:bg-slate-50 transition shadow-sm">➕ 新增一台儀器</button>
                         </div>
                     </div>
-                    <button type="submit" id="bookBtn" class="mt-4 w-full bg-blue-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-blue-700 transition">個別送出實驗室預約</button>
+                    <button type="submit" id="bookBtn" class="mt-4 w-full bg-blue-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-blue-700 transition">送出預約申請</button>
                 </div>
                 <div class="lg:col-span-2"><div id="calendar"></div></div>
             </div>
@@ -123,8 +127,8 @@
         </div>
         
         <div>
-            <label class="block text-sm font-bold text-slate-600">📝 備註欄 (高危害性藥品請說明用途 / 選填)</label>
-            <textarea id="chemNote" placeholder="例如：配製高危害試劑、清潔器皿用..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea>
+            <label class="block text-sm font-bold text-slate-600">📝 備註欄 (如有使用高危害性藥品請說明用途 / 選填)</label>
+            <textarea id="chemNote" placeholder="例如：配製高危害試劑、清潔器皿用、實驗儀器異常..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea>
         </div>
     </div>
 
@@ -224,18 +228,25 @@
                 method: "POST",
                 body: JSON.stringify({
                     action: "addLabBooking",
-                    data: {
-                        studentId: document.getElementById('bookingId').value,
-                        name: document.getElementById('bookingName').value,
-                        lab: document.getElementById('lab').value,
-                        start: document.getElementById('start').value,
-                        end: document.getElementById('end').value,
-                        device: selectedDevices.join("、")
+                   data: {
+    studentId: document.getElementById('bookingId').value,
+    name: document.getElementById('bookingName').value,
+    lab: document.getElementById('lab').value,
+    start: document.getElementById('start').value,
+    end: document.getElementById('end').value,
+    device: selectedDevices.join("、"),
+    purpose: document.getElementById('bookingPurpose').value 
                     }
                 })
             }).then(res => res.json()).then(res => {
                 alert(res.message);
-                if(res.status === "success") { document.getElementById('bookingForm').reset(); calendar.refetchEvents(); document.getElementById('deviceRowsContainer').innerHTML = ''; addDeviceRow(); }
+                if(res.status === "success") { 
+    document.getElementById('bookingForm').reset(); 
+    document.getElementById('bookingPurpose').value = ''; // 🚀 完美加在這裡！
+    calendar.refetchEvents(); 
+    document.getElementById('deviceRowsContainer').innerHTML = ''; 
+    addDeviceRow(); 
+}
             }).finally(() => { btn.disabled = false; btn.textContent = "個別送出實驗室預約"; });
         });
 
