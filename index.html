@@ -45,95 +45,96 @@
         <form id="bookingForm" class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 mb-8">
             <div class="border-b pb-3 mb-4">
                 <h2 class="text-2xl font-bold text-slate-700 flex items-center">📅實驗室預約使用登記</h2>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="space-y-4 lg:col-span-1 bg-slate-50 p-4 rounded-xl flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="grid grid-cols-2 gap-2">
-                            <div><label class="block text-sm font-bold text-slate-600">登記人學號</label><input type="text" id="bookingId" required placeholder="如：B10919024" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
-                            <div><label class="block text-sm font-bold text-slate-600">登記人姓名</label><input type="text" id="bookingName" required placeholder="如：李芷玲" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-600">預使用的實驗室</label>
-                            <select id="lab" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white">
-                                <option value="" disabled selected>-- 請選擇實驗室 --</option>
-                                <option value="RE126">RE126</option>
-                                <option value="RE130">RE130</option>
-                                <option value="RE132">RE132</option>
-                                <option value="RE220-1">RE220-1</option>
-                                <option value="RE306">RE306</option>
-                                <option value="RE308">RE308</option>
-                                <option value="AR303">AR303</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <div><label class="block text-sm font-bold text-slate-600">開始時間</label><input type="datetime-local" id="start" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
-                            <div><label class="block text-sm font-bold text-slate-600">結束時間</label><input type="datetime-local" id="end" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
-                      <div class="col-span-1 sm:col-span-2 lg:col-span-1">
-    <label class="block text-sm font-bold text-slate-600">📝 預約使用用途 <span class="text-red-500">*</span></label>
-    <input type="text" id="bookingPurpose" placeholder="如：纖維純化實驗、萃取精油etc." class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+            <div class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+    <div class="grid grid-cols-2 gap-2">
+        <div>
+            <label class="block text-sm font-bold text-slate-600">學號 <span class="text-red-500">*</span></label>
+            <input type="text" id="bookingId" required placeholder="如：B10919024" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+        </div>
+        <div>
+            <label class="block text-sm font-bold text-slate-600">姓名 <span class="text-red-500">*</span></label>
+            <input type="text" id="bookingName" required placeholder="如：李芷玲" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+        </div>
+    </div>
+    <div>
+        <label class="block text-sm font-bold text-slate-600">預使用的實驗室 <span class="text-red-500">*</span></label>
+        <select id="lab" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+            <option value="" disabled selected>-- 請選擇實驗室 --</option>
+            <option value="RE126">RE126</option>
+            <option value="RE130">RE130</option>
+            <option value="RE132">RE132</option>
+            <option value="RE220-1">RE220-1</option>
+            <option value="RE306">RE306</option>
+            <option value="RE308">RE308</option>
+            <option value="AR303">AR303</option>
+        </select>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div><label class="block text-sm font-bold text-slate-600">開始時間 <span class="text-red-500">*</span></label><input type="datetime-local" id="start" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
+        <div><label class="block text-sm font-bold text-slate-600">結束時間 <span class="text-red-500">*</span></label><input type="datetime-local" id="end" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
+    </div>
+    
+    <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+        <label class="block text-sm font-bold text-slate-600">📝 預約使用用途 <span class="text-red-500">*</span></label>
+        <input type="text" id="bookingPurpose" required placeholder="如：纖維純化實驗、萃取精油etc." class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+    </div>
+
+    <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+        <label class="block text-sm font-bold text-slate-600">💬 預約備註 (選填)</label>
+        <textarea id="bookingNote" placeholder="例如：會借用到XX實驗室使用etc..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea>
+    </div>
+
+    <div class="bg-slate-200/60 p-3 rounded-lg space-y-2 border border-slate-300">
+        <label class="block text-sm font-bold text-slate-700">🛠️ 使用儀器 (如使用多項儀器請多開欄位填寫)</label>
+        <div id="deviceRowsContainer" class="space-y-2"></div>
+        <button type="button" onclick="addDeviceRow()" class="w-full bg-white border border-slate-400 text-slate-700 text-xs font-bold py-1.5 px-3 rounded hover:bg-slate-50 transition shadow-sm">➕ 新增一台儀器</button>
+    </div>
+    <button type="submit" id="bookBtn" class="w-full bg-blue-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-blue-700 transition">送出預約申請</button>
 </div>
-                        </div>
-                        <div class="bg-slate-200/60 p-3 rounded-lg space-y-2 border border-slate-300">
-                            <label class="block text-sm font-bold text-slate-700">🛠️ 預使用儀器 (可多填) 如有使用多台儀器請多開欄位填寫</label>
-                            <div id="deviceRowsContainer" class="space-y-2"></div>
-                            <button type="button" onclick="addDeviceRow()" class="w-full bg-white border border-slate-400 text-slate-700 text-xs font-bold py-1.5 px-3 rounded hover:bg-slate-50 transition shadow-sm">➕ 新增一台儀器</button>
-                        </div>
                     </div>
                     <button type="submit" id="bookBtn" class="mt-4 w-full bg-blue-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-blue-700 transition">送出預約申請</button>
                 </div>
-                <div class="lg:col-span-2"><div id="calendar"></div></div>
-            </div>
-        </form>
-
-        <form id="chemForm" class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 mb-6">
-            <div class="border-b pb-3 mb-4">
-                <h2 class="text-2xl font-bold text-emerald-700 flex items-center">📦藥劑消耗登記 & 即時庫存含量</h2>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div class="lg:col-span-1 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-4">
-    <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-2">
-            <div>
-                <label class="block text-sm font-bold text-emerald-800">填報人學號</label>
-                <input type="text" id="chemId" required placeholder="如：B10919024" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
-            </div>
-            <div>
-                <label class="block text-sm font-bold text-emerald-800">填報人姓名</label>
-                <input type="text" id="chemName" required placeholder="如：李芷玲" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
-            </div>
-        </div>
-
+               <div class="lg:col-span-1 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-4">
+    <div class="grid grid-cols-2 gap-2">
         <div>
-            <label class="block text-sm font-bold text-emerald-800">使用實驗室</label>
-            <select id="chemLab" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
-                <option value="" disabled selected>-- 請選擇實驗室 --</option>
-                <option value="RE126">RE126</option>
-                <option value="RE130">RE130</option>
-                <option value="RE132">RE132</option>
-                <option value="RE220-1">RE220-1</option>
-                <option value="RE306">RE306</option>
-                <option value="RE308">RE308</option>
-                <option value="AR303">AR303</option>
-            </select>
+            <label class="block text-sm font-bold text-emerald-800">填報人學號 <span class="text-red-500">*</span></label>
+            <input type="text" id="chemId" required placeholder="如：B11002001" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
         </div>
-
         <div>
-            <span class="block text-sm font-bold text-emerald-800 mb-2">🧪 實驗所使用的藥劑 (可複選)單位以選項單位為準</span>
-            <div id="chemRowsContainer" class="space-y-2"></div>
-            <button type="button" onclick="addChemRow()" class="w-full mt-2 bg-white border border-emerald-500 text-emerald-700 font-bold py-1.5 px-4 rounded-md hover:bg-emerald-50 transition text-xs shadow-sm">
-                ➕ 新增一項藥劑
-            </button>
-        </div>
-        
-        <div>
-            <label class="block text-sm font-bold text-slate-600">📝 備註欄 (如有使用高危害性藥品請說明用途 / 選填)</label>
-            <textarea id="chemNote" placeholder="例如：配製高危害試劑、清潔器皿用、實驗儀器異常..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea>
+            <label class="block text-sm font-bold text-emerald-800">填報人姓名 <span class="text-red-500">*</span></label>
+            <input type="text" id="chemName" required placeholder="如：王小明" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
         </div>
     </div>
-
-    <button type="submit" id="logChemBtn" class="mt-4 w-full bg-emerald-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-emerald-700 transition">
-        個別送出藥劑消耗登記
+    
+    <div>
+        <label class="block text-sm font-bold text-emerald-800">使用實驗室 <span class="text-red-500">*</span></label>
+        <select id="chemLab" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+            <option value="" disabled selected>-- 請選擇實驗室 --</option>
+            <option value="RE126">RE126</option>
+            <option value="RE130">RE130</option>
+            <option value="RE132">RE132</option>
+            <option value="RE220-1">RE220-1</option>
+            <option value="RE306">RE306</option>
+            <option value="RE308">RE308</option>
+            <option value="AR303">AR303</option>
+        </select>
+    </div>
+    
+    <div>
+        <span class="block text-sm font-bold text-emerald-800 mb-2">🧪 實驗所使用的藥劑 (可複選)單位以選項單位為準 <span class="text-red-500">*</span></span>
+        <div id="chemRowsContainer" class="space-y-2"></div>
+        <button type="button" onclick="addChemRow()" class="w-full mt-2 bg-white border border-emerald-500 text-emerald-700 font-bold py-1.5 px-4 rounded-md hover:bg-emerald-50 transition text-xs shadow-sm">
+            ➕ 新增一項藥劑
+        </button>
+    </div>
+    
+    <div>
+        <label class="block text-sm font-bold text-slate-600">📝 備註欄 (如有使用高危害性藥品請說明用途)</label>
+        <textarea id="chemNote" placeholder="例如：配製高危害試劑、清潔器皿用、實驗儀器異常..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea>
+    </div>
+    
+    <button type="submit" id="logChemBtn" class="w-full bg-emerald-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-emerald-700 transition">
+        送出藥劑消耗登記
     </button>
 </div>
                 <div class="lg:col-span-2">
@@ -235,14 +236,16 @@
     start: document.getElementById('start').value,
     end: document.getElementById('end').value,
     device: selectedDevices.join("、"),
-    purpose: document.getElementById('bookingPurpose').value 
-                    }
+    purpose: document.getElementById('bookingPurpose').value,
+    note: document.getElementById('bookingNote').value // 🚀 新增這行，把預約備註傳給後台！
+}
                 })
             }).then(res => res.json()).then(res => {
                 alert(res.message);
                 if(res.status === "success") { 
     document.getElementById('bookingForm').reset(); 
-    document.getElementById('bookingPurpose').value = ''; // 🚀 完美加在這裡！
+    document.getElementById('bookingPurpose').value = ''; 
+    document.getElementById('bookingNote').value = ''; // 🚀 新增這行，送出成功後把預約備註也清乾淨！
     calendar.refetchEvents(); 
     document.getElementById('deviceRowsContainer').innerHTML = ''; 
     addDeviceRow(); 
