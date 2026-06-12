@@ -186,7 +186,7 @@
                     const labName = p.lab || info.event.title.split(" - ")[0];
                     
                     document.getElementById('modalLab').textContent = labName;
-                    document.getElementById('modalUser').textContent = p.user; 
+                    document.getElementById('modalUser').textContent = p.user; // 隱藏學號
                     document.getElementById('modalStart').textContent = startStr;
                     document.getElementById('modalEnd').textContent = endStr;
                     document.getElementById('modalPurpose').textContent = p.purpose || "無";
@@ -194,7 +194,8 @@
                     document.getElementById('modalNote').textContent = p.note || "無";
 
                     document.getElementById('modalCancelBtn').onclick = function() {
-                        handleCancelBooking(p.id, p.row);
+                        // 🚀 傳遞學號、實驗室、原始開始時間
+                        handleCancelBooking(p.id, labName, info.event.start);
                     };
                     const modal = document.getElementById('detailsModal');
                     modal.classList.remove('hidden');
@@ -210,7 +211,7 @@
             modal.classList.add('hidden');
         }
 
-        function handleCancelBooking(studentId, rowNum) {
+        function handleCancelBooking(studentId, labName, rawStart) {
             var inputId = prompt("⚠️ 安全驗證：\n請輸入這筆預約的「登記人學號」以確認取消此時段：");
             if (inputId === null) return; 
             
@@ -219,16 +220,28 @@
                 return;
             }
             
+            const formatToLocalISO = (dateObj) => {
+                if (!dateObj) return "";
+                let tzOffset = dateObj.getTimezoneOffset() * 60000;
+                return (new Date(dateObj.getTime() - tzOffset)).toISOString().slice(0, 16);
+            };
+
             const cancelBtn = document.getElementById('modalCancelBtn');
             cancelBtn.disabled = true; cancelBtn.textContent = "正在同步取消中...";
             
             fetch(API_URL, {
                 method: "POST",
-                body: JSON.stringify({ action: "deleteLabBooking", data: { studentId: studentId, row: rowNum } })
+                body: JSON.stringify({ 
+                    action: "deleteLabBooking", 
+                    data: { studentId: studentId, lab: labName, start: formatToLocalISO(rawStart) } 
+                })
             }).then(res => res.json()).then(res => {
                 alert(res.message);
                 if (res.status === "success") { closeDetailsModal(); calendar.refetchEvents(); }
-            }).catch(err => alert("連線後台失敗，請稍後再試。"))
+            }).catch(err => {
+                alert("連線後台失敗，請稍後再試。");
+                console.error(err);
+            })
             .finally(() => { cancelBtn.disabled = false; cancelBtn.textContent = "🗑️ 取消此筆預約"; });
         }
 
