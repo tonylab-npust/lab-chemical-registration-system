@@ -217,9 +217,12 @@
     .catch(err => failureCallback(err));
 },
                 eventClick: function(info) {
-                    var p = info.event.extendedProps;
-                    alert(`【預約詳情】\n實驗室：${info.event.title}\n使用者：${p.user} (${p.id})\n使用用途：${p.purpose || '無'}\n儀器：${p.device}\n備註：${p.note || '無'}`);
-                }
+    // 💡 抓取日曆背後帶過來的完整資料大禮包
+    var p = info.event.extendedProps;
+    
+    // 🚀 終極對齊：確保學號、姓名、用途、儀器、備註通通抓到最新欄位！
+    alert(`【預約詳情】\n-----------------------\n預約實驗室：${p.lab || info.event.title.split(" - ")[0]}\n預約使用者：${p.user} (${p.id})\n\n📝 使用用途：${p.purpose}\n🛠️ 使用儀器：${p.device}\n💬 預約備註：${p.note}`);
+}
             });
             calendar.render();
         }
