@@ -156,7 +156,8 @@
         </div>
     </div>
 
-    <script>
+   <script>
+        // 🛑 請把這裡換成你剛剛最新部署的 URL！
         var API_URL = "https://script.google.com/macros/s/AKfycbwPRdOP7n6ysAnjPqaEeKarmy368ahh6jRWcJYN8LofkIyUar4WBSL_GblwVbnSgRPv_g/exec"; 
         let calendar;
         let globalChemData = []; 
@@ -194,8 +195,7 @@
                     document.getElementById('modalNote').textContent = p.note || "無";
 
                     document.getElementById('modalCancelBtn').onclick = function() {
-                        // 🚀 傳遞學號、實驗室、原始開始時間
-                        handleCancelBooking(p.id, labName, info.event.start);
+                        handleCancelBooking(p.id, p.row);
                     };
                     const modal = document.getElementById('detailsModal');
                     modal.classList.remove('hidden');
@@ -211,7 +211,8 @@
             modal.classList.add('hidden');
         }
 
-        function handleCancelBooking(studentId, labName, rawStart) {
+        // 🚀 強制通行證版取消預約
+        function handleCancelBooking(studentId, rowNum) {
             var inputId = prompt("⚠️ 安全驗證：\n請輸入這筆預約的「登記人學號」以確認取消此時段：");
             if (inputId === null) return; 
             
@@ -220,27 +221,24 @@
                 return;
             }
             
-            const formatToLocalISO = (dateObj) => {
-                if (!dateObj) return "";
-                let tzOffset = dateObj.getTimezoneOffset() * 60000;
-                return (new Date(dateObj.getTime() - tzOffset)).toISOString().slice(0, 16);
-            };
-
             const cancelBtn = document.getElementById('modalCancelBtn');
             cancelBtn.disabled = true; cancelBtn.textContent = "正在同步取消中...";
             
             fetch(API_URL, {
                 method: "POST",
-                body: JSON.stringify({ 
-                    action: "deleteLabBooking", 
-                    data: { studentId: studentId, lab: labName, start: formatToLocalISO(rawStart) } 
-                })
-            }).then(res => res.json()).then(res => {
+                redirect: "follow",
+                headers: { "Content-Type": "text/plain;charset=utf-8" }, // 🔥 強制繞過 Google 阻擋網
+                body: JSON.stringify({ action: "deleteLabBooking", data: { studentId: studentId, row: rowNum } })
+            })
+            .then(res => {
+                if(!res.ok) throw new Error("伺服器錯誤 " + res.status);
+                return res.json();
+            })
+            .then(res => {
                 alert(res.message);
                 if (res.status === "success") { closeDetailsModal(); calendar.refetchEvents(); }
             }).catch(err => {
-                alert("連線後台失敗，請稍後再試。");
-                console.error(err);
+                alert("連線後台失敗！可能是 API_URL 沒更新，或被瀏覽器阻擋。\n錯誤細節: " + err.message);
             })
             .finally(() => { cancelBtn.disabled = false; cancelBtn.textContent = "🗑️ 取消此筆預約"; });
         }
@@ -291,6 +289,7 @@
             container.appendChild(div);
         }
 
+        // 🚀 強制通行證版預約
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('bookBtn'); btn.disabled = true; btn.textContent = "預約中...";
@@ -299,6 +298,8 @@
 
             fetch(API_URL, {
                 method: "POST",
+                redirect: "follow",
+                headers: { "Content-Type": "text/plain;charset=utf-8" }, // 🔥 強制繞過 Google 阻擋網
                 body: JSON.stringify({
                     action: "addLabBooking",
                     data: {
@@ -325,6 +326,7 @@
             }).finally(() => { btn.disabled = false; btn.textContent = "送出預約申請"; });
         });
 
+        // 🚀 強制通行證版耗材扣除
         document.getElementById('chemForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('logChemBtn'); btn.disabled = true; btn.textContent = "扣除庫存中...";
@@ -337,6 +339,8 @@
 
             fetch(API_URL, {
                 method: "POST",
+                redirect: "follow",
+                headers: { "Content-Type": "text/plain;charset=utf-8" }, // 🔥 強制繞過 Google 阻擋網
                 body: JSON.stringify({
                     action: "addChemLog",
                     data: {
