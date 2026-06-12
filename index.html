@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
     <style>
-        /* 🚀 鎖死月曆高度，不讓它亂撐壞版面 */
+        /* 鎖死月曆高度，完美切齊左邊表單 */
         .fc { height: 680px; background: white; padding: 16px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
         .low-stock { color: #ef4444; font-weight: bold; animation: pulse 2s infinite; }
     </style>
@@ -16,7 +16,6 @@
 <body class="bg-slate-100 min-h-screen text-gray-800 pb-12">
 
     <div class="container mx-auto px-4 py-6 max-w-7xl">
-        
         <header class="mb-6 text-center">
             <h1 class="text-3xl font-extrabold text-gray-900">實驗室管理系統</h1>
         </header>
@@ -131,7 +130,9 @@
                 </div>
             </div>
         </div>
-    </div> <div id="detailsModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+    </div>
+
+    <div id="detailsModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
             <div class="flex justify-between items-center border-b pb-2 border-slate-100">
                 <h3 class="text-xl font-extrabold text-slate-800 flex items-center">📅 預約詳細資訊</h3>
@@ -169,7 +170,7 @@
                 headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
                 buttonText: { today: '今天', month: '月', week: '週' },
                 events: function(fetchInfo, successCallback, failureCallback) {
-                    fetch(`${API_URL}?action=getBookings`).then(res => res.json()).then(data => {
+                    fetch(API_URL + "?action=getBookings").then(res => res.json()).then(data => {
                         const labColors = { 'RE126': '#f97316', 'RE130': '#3b82f6', 'RE132': '#ef4444', 'RE220-1': '#8b5cf6', 'RE306': '#ec4899', 'RE308': '#10b981', 'AR303': '#06b6d4' };
                         const coloredEvents = data.map(event => {
                             const labName = event.extendedProps.lab || (event.title ? event.title.split(" - ")[0] : "");
@@ -185,7 +186,7 @@
                     const labName = p.lab || info.event.title.split(" - ")[0];
                     
                     document.getElementById('modalLab').textContent = labName;
-                    document.getElementById('modalUser').textContent = p.user; // 🔥 已隱藏學號，變成隱形密碼
+                    document.getElementById('modalUser').textContent = p.user; // 隱藏學號
                     document.getElementById('modalStart').textContent = startStr;
                     document.getElementById('modalEnd').textContent = endStr;
                     document.getElementById('modalPurpose').textContent = p.purpose || "無";
@@ -193,7 +194,6 @@
                     document.getElementById('modalNote').textContent = p.note || "無";
 
                     document.getElementById('modalCancelBtn').onclick = function() {
-                        // 🚀 傳遞正確的學號與 row 給刪除函式
                         handleCancelBooking(p.id, p.row);
                     };
                     const modal = document.getElementById('detailsModal');
@@ -210,12 +210,10 @@
             modal.classList.add('hidden');
         }
 
-        // 🚀 全新的秒殺取消呼叫器 (透過 Row 行號定位)
         function handleCancelBooking(studentId, rowNum) {
             var inputId = prompt("⚠️ 安全驗證：\n請輸入這筆預約的「登記人學號」以確認取消此時段：");
             if (inputId === null) return; 
             
-            // 無視大小寫，強硬比對！
             if (inputId.trim().toUpperCase() !== studentId.trim().toUpperCase()) {
                 alert("❌ 取消失敗：輸入的學號與該預約原登記人不符！請勿亂刪別人的時段。");
                 return;
@@ -226,10 +224,7 @@
             
             fetch(API_URL, {
                 method: "POST",
-                body: JSON.stringify({ 
-                    action: "deleteLabBooking", 
-                    data: { studentId: studentId, row: rowNum } // 🔥 直接傳送 Excel 的第幾列給後台
-                })
+                body: JSON.stringify({ action: "deleteLabBooking", data: { studentId: studentId, row: rowNum } })
             }).then(res => res.json()).then(res => {
                 alert(res.message);
                 if (res.status === "success") { closeDetailsModal(); calendar.refetchEvents(); }
@@ -238,7 +233,7 @@
         }
 
         function loadChemicals() {
-            fetch(`${API_URL}?action=getChemicals`)
+            fetch(API_URL + "?action=getChemicals")
             .then(res => res.json()).then(data => {
                 globalChemData = data; 
                 document.getElementById('chemTableBody').innerHTML = '';
@@ -250,94 +245,6 @@
                     let isLow = (chem.stock > 0 || chem.safe > 0) && (chem.stock <= chem.safe);
                     let statusText = isLow ? '⚠️ 需補貨' : '✅ 充足';
                     if(chem.stock === 0 && chem.safe === 0) statusText = '➖ 未設量';
-                    document.getElementById('chemTableBody').innerHTML += `
-                        <tr class="hover:bg-slate-50 transition ${isLow ? 'bg-red-50 text-red-700 font-bold':''}">
-                            <td class="p-3 font-semibold">${chem.name}</td><td>${chem.english || '—'}</td><td class="font-mono">${chem.formula || '—'}</td><td class="font-mono">${chem.cas || '—'}</td><td class="text-right font-bold">${chem.stock}</td><td class="text-right text-slate-400">${chem.safe}</td><td>${chem.unit || '—'}</td><td class="text-center"><span class="${isLow ? 'low-stock':''}">${statusText}</span></td>
-                        </tr>`;
-                });
-            }).catch(err => alert("載入資料庫失敗，請確認後台權限已開並且網址正確。"));
-        }
-
-        function addDeviceRow() {
-            const container = document.getElementById('deviceRowsContainer');
-            const rowId = 'device_row_' + Date.now();
-            const div = document.createElement('div');
-            div.id = rowId; div.className = "flex space-x-2 items-center device-row bg-white p-1.5 rounded shadow-sm border border-slate-200";
-            div.innerHTML = `<input type="text" required class="device-input flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs" placeholder="如：烘箱、恆溫水浴槽、精油萃取裝置etc."><button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="document.getElementById('${rowId}').remove()">✕</button>`;
-            container.appendChild(div);
-        }
-
-        function addChemRow() {
-            const container = document.getElementById('chemRowsContainer');
-            const rowDiv = document.createElement('div');
-            rowDiv.className = "flex space-x-2 items-center chem-row bg-white p-2 rounded-lg shadow-sm border border-slate-200";
-            let optionsHtml = '<option value="">-- 選擇藥劑 --</option>';
-            globalChemData.forEach(c => { optionsHtml += `<option value="${c.name}">${c.name}${c.unit ? \` (${c.unit})\`:''}</option>`; });
-            rowDiv.innerHTML = `<select class="chem-select flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs" required>${optionsHtml}</select><input type="number" step="any" required class="chem-amount w-16 p-1.5 border border-gray-300 rounded bg-white text-xs" placeholder="數量"><button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="this.parentElement.remove()">✕</button>`;
-            container.appendChild(rowDiv);
-        }
-
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('bookBtn'); btn.disabled = true; btn.textContent = "預約中...";
-            let selectedDevices = [];
-            document.querySelectorAll('.device-input').forEach(input => { if (input.value.trim()) selectedDevices.push(input.value.trim()); });
-
-            fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({
-                    action: "addLabBooking",
-                    data: {
-                        studentId: document.getElementById('bookingId').value,
-                        name: document.getElementById('bookingName').value,
-                        lab: document.getElementById('lab').value,
-                        start: document.getElementById('start').value,
-                        end: document.getElementById('end').value,
-                        device: selectedDevices.join("、"),
-                        purpose: document.getElementById('bookingPurpose').value,
-                        note: document.getElementById('bookingNote').value 
-                    }
-                })
-            }).then(res => res.json()).then(res => {
-                alert(res.message);
-                if(res.status === "success") { 
-                    document.getElementById('bookingForm').reset(); 
-                    document.getElementById('bookingPurpose').value = ''; 
-                    document.getElementById('bookingNote').value = ''; 
-                    calendar.refetchEvents(); 
-                    document.getElementById('deviceRowsContainer').innerHTML = ''; 
-                    addDeviceRow(); 
-                }
-            }).finally(() => { btn.disabled = false; btn.textContent = "送出預約申請"; });
-        });
-
-        document.getElementById('chemForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('logChemBtn'); btn.disabled = true; btn.textContent = "扣除庫存中...";
-            let selectedChems = [];
-            document.querySelectorAll('.chem-row').forEach(row => {
-                let name = row.querySelector('.chem-select').value;
-                let amt = row.querySelector('.chem-amount').value;
-                if (name && amt > 0) selectedChems.push({ name: name, amount: amt });
-            });
-
-            fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({
-                    action: "addChemLog",
-                    data: {
-                        studentId: document.getElementById('chemId').value,
-                        name: document.getElementById('chemName').value,
-                        lab: document.getElementById('chemLab').value,
-                        note: document.getElementById('chemNote').value,
-                        chemList: selectedChems
-                    }
-                })
-            }).then(res => res.json()).then(res => {
-                alert(res.message);
-                if(res.status === "success") { document.getElementById('chemForm').reset(); loadChemicals(); }
-            }).finally(() => { btn.disabled = false; btn.textContent = "送出藥劑消耗登記"; });
-        });
-    </script>
-</body>
-</html>
+                    document.getElementById('chemTableBody').innerHTML += 
+                        '<tr class="hover:bg-slate-50 transition ' + (isLow ? 'bg-red-50 text-red-700 font-bold':'') + '">' +
+                            '<td class="p-3 font-semibold">' + chem.name + '</td><td>' + (chem.english || '—') + '</td><td class="font-mono">' + (chem.formula || '—
