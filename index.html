@@ -198,55 +198,35 @@
         let globalChemData = []; 
 
         document.addEventListener('DOMContentLoaded', () => { initCalendar(); loadChemicals(); });
-
-        function initCalendar() {
-            var calendarEl = document.getElementById('calendar');
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth', locale: 'zh-tw',
-                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
-                buttonText: { today: '今天', month: '月', week: '週' },
-                events: function(fetchInfo, successCallback, failureCallback) {
-    fetch(`${API_URL}?action=getBookings`)
-    .then(res => res.json())
-    .then(data => {
-        // 🎨 在這裡定義每一間實驗室的專屬顏色 (您可以自己修改喜歡的色碼)
-        const labColors = {
-            'RE126': '#f97316',   // 溫暖橘
-            'RE130': '#3b82f6',   // 活力藍
-            'RE132': '#ef4444',   // 警示紅
-            'RE220-1': '#8b5cf6', // 質感紫
-            'RE306': '#ec4899',   // 甜美粉
-            'RE308': '#10b981',   // 森林綠
-            'AR303': '#06b6d4'    // 蒂芬妮藍
-        };
-
-        // 自動遍歷每一筆預約，根據實驗室名稱塞入對應顏色
-        const coloredEvents = data.map(event => {
-            // 這裡會去抓資料庫裡的實驗室名稱 (例如 "RE308")
-            const labName = event.extendedProps.lab || (event.title ? event.title.split(" - ")[0] : "");
-            
-            return {
-                ...event,
-                backgroundColor: labColors[labName] || '#64748b', // 設定背景顏色 (如果沒對上就用灰色)
-                borderColor: labColors[labName] || '#64748b'     // 設定邊框顏色
-            };
-        });
-        
-        successCallback(coloredEvents);
-    })
-    .catch(err => failureCallback(err));
-},
-                eventClick: function(info) {
-    // 💡 抓取日曆背後帶過來的完整資料大禮包
-    var p = info.event.extendedProps;
+// 🚀 全新功能：精準比對學號、實驗室與時間，秒殺刪除該筆預約列！
+function deleteLabBooking(data) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Bookings");
+  var excelData = sheet.getDataRange().getValues();
+  
+  for (var i = 1; i < excelData.length; i++) {
+    // 將試算表的時間標準化為前 16 位字元 (yyyy-MM-ddTHH:mm) 避免格式誤差
+    var sheetStart = excelData[i][3];
+    var sheetEnd = excelData[i][4];
+    if (sheetStart instanceof Date) sheetStart = Utilities.formatDate(sheetStart, Session.getScriptTimeZone(), "yyyy-MM-dd'T'HH:mm");
+    if (sheetEnd instanceof Date) sheetEnd = Utilities.formatDate(sheetEnd, Session.getScriptTimeZone(), "yyyy-MM-dd'T'HH:mm");
     
-    // 🚀 終極對齊：確保學號、姓名、用途、儀器、備註通通抓到最新欄位！
-    alert(`【預約詳情】\n-----------------------\n預約實驗室：${p.lab || info.event.title.split(" - ")[0]}\n預約使用者：${p.user} (${p.id})\n\n📝 使用用途：${p.purpose}\n🛠️ 使用儀器：${p.device}\n💬 預約備註：${p.note}`);
-}
-            });
-            calendar.render();
-        }
+    var checkStart = String(sheetStart).substring(0, 16);
+    var checkEnd = String(sheetEnd).substring(0, 16);
+    var targetStart = String(data.start).substring(0, 16);
+    var targetEnd = String(data.end).substring(0, 16);
 
+    // 🔒 四重安全防呆比對：學號 + 實驗室 + 開始時間 + 結束時間 通通吻合才准刪
+    if (excelData[i][0] == data.studentId && 
+        excelData[i][2] == data.lab && 
+        checkStart == targetStart && 
+        checkEnd == targetEnd) {
+      
+      sheet.deleteRow(i + 1); // 刪除該行！
+      return {status: "success", message: "🗑️ 該筆實驗室預約已成功取消並除名！"};
+    }
+  }
+  return {status: "error", message: "❌ 取消失敗：驗證學號不符，或找不到該時段。"};
+}
         function loadChemicals() {
             fetch(`${API_URL}?action=getChemicals`)
             .then(res => res.json()).then(data => {
@@ -362,5 +342,28 @@ function addDeviceRow() {
             }).finally(() => { btn.disabled = false; btn.textContent = "送出藥劑消耗登記"; });
         });
     </script>
+<div id="detailsModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4 animate-fade-in">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4 transform transition-all scale-100">
+            <div class="flex justify-between items-center border-b pb-2 border-slate-100">
+                <h3 class="text-xl font-extrabold text-slate-800 flex items-center">📅 預約詳細資訊</h3>
+                <button onclick="closeDetailsModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold transition">✕</button>
+            </div>
+            <div class="space-y-3 text-sm text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <p class="flex justify-between"><span class="font-bold text-slate-500">預約實驗室：</span><span id="modalLab" class="font-extrabold text-blue-600 text-base"></span></p>
+                <p class="flex justify-between"><span class="font-bold text-slate-500">預約登記人：</span><span id="modalUser" class="font-semibold"></span></p>
+                <div class="border-t border-slate-200/60 my-1"></div>
+                <p><span class="font-bold text-slate-500">⏳ 開始：</span><span id="modalStart" class="font-mono text-xs bg-slate-200/60 px-1.5 py-0.5 rounded"></span></p>
+                <p><span class="font-bold text-slate-500">⌛ 結束：</span><span id="modalEnd" class="font-mono text-xs bg-slate-200/60 px-1.5 py-0.5 rounded"></span></p>
+                <div class="border-t border-slate-200/60 my-1"></div>
+                <p><strong>📝 使用用途：</strong><span id="modalPurpose" class="text-slate-600 block mt-0.5 pl-2 border-l-2 border-slate-300"></span></p>
+                <p><strong>🛠️ 使用儀器：</strong><span id="modalDevice" class="text-slate-600 block mt-0.5 pl-2 border-l-2 border-slate-300"></span></p>
+                <p><strong>💬 預約備註：</strong><span id="modalNote" class="text-slate-600 block mt-0.5 pl-2 border-l-2 border-slate-300"></span></p>
+            </div>
+            <div class="pt-2 flex space-x-2">
+                <button type="button" onclick="closeDetailsModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl transition text-sm">關閉視窗</button>
+                <button type="button" id="modalCancelBtn" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-extrabold py-2 rounded-xl transition text-sm shadow-sm">🗑️ 取消此筆預約</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
