@@ -69,8 +69,6 @@
                             <label class="block text-sm font-bold text-slate-700">🛠️ 使用儀器 (如有多項請多開欄位填寫) <span class="text-red-500">*</span></label>
                             <div id="deviceRowsContainer" class="space-y-2"></div>
                             <button type="button" onclick="addDeviceRow()" class="w-full bg-white border border-slate-400 text-slate-700 text-xs font-bold py-1.5 px-3 rounded hover:bg-slate-50 transition shadow-sm">➕ 新增一台儀器</button>
-                            <div id="deviceRowsContainer" class="space-y-2"></div>
-                            <button type="button" onclick="addDeviceRow()" class="w-full bg-white border border-slate-400 text-slate-700 text-xs font-bold py-1.5 px-3 rounded hover:bg-slate-50 transition shadow-sm">➕ 新增一台儀器</button>
                         </div>
                     </div>
                     <button type="submit" id="bookBtn" class="w-full bg-blue-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-blue-700 transition mt-4">送出預約申請</button>
@@ -150,11 +148,9 @@
                 <p><strong>📝 使用用途：</strong><span id="modalPurpose" class="text-slate-600 block mt-0.5 pl-2 border-l-2 border-slate-300"></span></p>
                 <p><strong>🛠️ 使用儀器：</strong><span id="modalDevice" class="text-slate-600 block mt-0.5 pl-2 border-l-2 border-slate-300"></span></p>
                 <p><strong>💬 預約備註：</strong><span id="modalNote" class="text-slate-600 block mt-0.5 pl-2 border-l-2 border-slate-300"></span></p>
-            </div>
-            <div class="pt-2 flex space-x-2">
-                <button type="button" onclick="closeDetailsModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl transition text-sm">關閉視窗</button>
-                <button type="button" id="modalCancelBtn" class="flex-1 bg-red-500 hover:bg-red-600 text-white font-extrabold py-2 rounded-xl transition text-sm shadow-sm">🗑️ 取消此筆預約</button>
-            </div>
+            <div class="pt-2">
+    <button type="button" id="modalCancelBtn" class="w-full bg-red-500 hover:bg-red-600 text-white font-extrabold py-2.5 rounded-xl transition text-base shadow-sm">🗑️ 取消此筆預約</button>
+</div>
         </div>
     </div>
 
