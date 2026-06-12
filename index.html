@@ -26,13 +26,14 @@
         💡 為維護實驗室安全及庫存盤點之準確性，凡使用任何藥品、試劑或化學品者，務必於使用後立即完成下方登錄。
     </div>
                 <ul class="list-disc pl-5 space-y-1 text-slate-700 font-medium">
-                    <li>使用者應詳實登記預約，並於實驗完成後主動匯報藥劑消耗。兩者是獨立分開的。、</li>
-                    <li>藥劑名稱請依容器標示完整填寫，不得使用簡稱或代號。</li>
+                    <li>使用者應於實驗前完成預約登記，並於實驗結束後主動申報藥劑使用情形。</li>
+                    <li>預約登記與藥劑申報為兩項獨立作業，請分別完成。</li>
+                    <li>藥劑名稱一律以系統下拉選單之標準資料為準，若未找到對應藥劑，請聯繫管理人員新增，並於備註欄上說明。</li>
                     <li>消耗量請填寫「純數字」即可，系統選單已自動帶出對應單位（填寫單位以mL與g為準）。</li>
                     <li>若領用高危害性化學品，務必於 「📝 備註欄」 詳實說明實驗用途。</li>
                     <li>使用後請確認藥品已妥善封存並放回指定位置。</li>
                     <li>發現藥品不足、變質、洩漏或異常情形，請立即通知實驗室管理人員。</li>
-                    <li class="text-red-600 font-semibold">⚠️ 未依規定登錄者，實驗室有權暫停其藥品使用權限。</li>
+                    <li class="text-red-600 font-semibold">⚠️ 未依規定完成登錄或申報者，實驗室有權暫停其藥品及儀器使用權限。</li>
                 </ul>
             </div>
             <div class="mt-4 pt-3 border-t border-blue-200/60 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-600">
@@ -70,7 +71,7 @@
                             <div><label class="block text-sm font-bold text-slate-600">結束時間</label><input type="datetime-local" id="end" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white"></div>
                         </div>
                         <div class="bg-slate-200/60 p-3 rounded-lg space-y-2 border border-slate-300">
-                            <label class="block text-sm font-bold text-slate-700">🛠️ 使用儀器 (可多填)</label>
+                            <label class="block text-sm font-bold text-slate-700">🛠️ 預使用儀器 (可多填) 如有使用多台儀器請多開欄位填寫</label>
                             <div id="deviceRowsContainer" class="space-y-2"></div>
                             <button type="button" onclick="addDeviceRow()" class="w-full bg-white border border-slate-400 text-slate-700 text-xs font-bold py-1.5 px-3 rounded hover:bg-slate-50 transition shadow-sm">➕ 新增一台儀器</button>
                         </div>
@@ -114,7 +115,7 @@
         </div>
 
         <div>
-            <span class="block text-sm font-bold text-emerald-800 mb-2">🧪 實驗消耗藥劑明細 (可多選)單位以mL與g為準</span>
+            <span class="block text-sm font-bold text-emerald-800 mb-2">🧪 實驗所使用的藥劑 (可複選)單位以選項單位為準</span>
             <div id="chemRowsContainer" class="space-y-2"></div>
             <button type="button" onclick="addChemRow()" class="w-full mt-2 bg-white border border-emerald-500 text-emerald-700 font-bold py-1.5 px-4 rounded-md hover:bg-emerald-50 transition text-xs shadow-sm">
                 ➕ 新增一項藥劑
