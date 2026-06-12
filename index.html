@@ -16,7 +16,7 @@
 
     <div class="container mx-auto px-4 py-6 max-w-7xl">
         <header class="mb-6 text-center">
-            <h1 class="text-3xl font-extrabold text-gray-900">🧪 實驗室管理系統</h1>
+            <h1 class="text-3xl font-extrabold text-gray-900">實驗室管理系統</h1>
         </header>
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 border-l-4 border-amber-500 mb-8">
@@ -31,7 +31,7 @@
                 <li>預約登記與藥劑申報為兩項獨立作業，請分別完成。</li>
                 <li>藥劑名稱一律以系統下拉選單之標準資料為準，若未找到對應藥劑，請聯繫管理人員新增，並於備註欄上說明。</li>
                 <li>消耗量請填寫「純數字」即可，系統選單已自動帶出對應單位。</li>
-                <li>若領用高危害性化學品，務必於 「📝 備註欄」 詳實說明實驗用途。</li>
+                <li>若領用高危害性化學品，務必於 「📝 備註欄」 詳實說明實驗用途.</li>
                 <li>使用後請確認藥品已妥善封存並放回指定位置。</li>
                 <li>發現藥品變質、洩漏或異常情形，請立即通知實驗室管理人員。</li>
                 <li class="text-red-600 font-semibold">⚠️ 未依規定完成登錄或申報者，實驗室有權暫停其藥品及儀器使用權限。</li>
@@ -39,16 +39,17 @@
             
             <div class="mt-4 pt-3 border-t border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-slate-500">
                 <div>👨‍🏫 <span class="font-bold text-slate-700">負責老師：</span>吳東霖教授</div>
-                <div>🎓 <span class="font-bold text-slate-700">研 究 生：</span>李芷玲 (0970021689)、邱玟綺 (0903098207)</div>
+                <div>🎓 <span class="font-bold text-slate-700">管研研究生：</span>李芷玲 (0970021689)、邱玟綺 (0903098207)</div>
             </div>
         </div>
 
-        <form id="bookingForm" class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 mb-8">
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 mb-8">
             <div class="border-b pb-3 mb-4">
                 <h2 class="text-2xl font-bold text-slate-700 flex items-center">📅 區域一：實驗室預約使用登記</h2>
             </div>
+            
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 flex flex-col justify-between">
+                <form id="bookingForm" class="lg:col-span-1 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 flex flex-col justify-between">
                     <div class="space-y-4">
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -78,12 +79,12 @@
                             <div><label class="block text-sm font-bold text-slate-600">結束時間 <span class="text-red-500">*</span></label><input type="datetime-local" id="end" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm"></div>
                         </div>
                         
-                        <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+                        <div>
                             <label class="block text-sm font-bold text-slate-600">📝 預約使用用途 <span class="text-red-500">*</span></label>
                             <input type="text" id="bookingPurpose" required placeholder="如：纖維純化實驗、萃取精油etc." class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
                         </div>
 
-                        <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+                        <div>
                             <label class="block text-sm font-bold text-slate-600">💬 預約備註 (選填)</label>
                             <textarea id="bookingNote" placeholder="例如：會借用到XX實驗室使用etc..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea>
                         </div>
@@ -95,9 +96,223 @@
                         </div>
                     </div>
                     <button type="submit" id="bookBtn" class="w-full bg-blue-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-blue-700 transition mt-4">送出預約申請</button>
-                </div>
+                </form>
+                
                 <div class="lg:col-span-2">
                     <div id="calendar"></div>
                 </div>
             </div>
-        </form>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 mb-6">
+            <div class="border-b pb-3 mb-4">
+                <h2 class="text-2xl font-bold text-emerald-700 flex items-center">📦 區域二：藥劑消耗登記 & 即時庫存含量</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <form id="chemForm" class="lg:col-span-1 bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-4">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-sm font-bold text-emerald-800">填報人學號 <span class="text-red-500">*</span></label>
+                            <input type="text" id="chemId" required placeholder="如：B11002001" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-emerald-800">填報人姓名 <span class="text-red-500">*</span></label>
+                            <input type="text" id="chemName" required placeholder="如：王小明" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-emerald-800">使用實驗室 <span class="text-red-500">*</span></label>
+                        <select id="chemLab" required class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm">
+                            <option value="" disabled selected>-- 請選擇實驗室 --</option>
+                            <option value="RE126">RE126</option>
+                            <option value="RE130">RE130</option>
+                            <option value="RE132">RE132</option>
+                            <option value="RE220-1">RE220-1</option>
+                            <option value="RE306">RE306</option>
+                            <option value="RE308">RE308</option>
+                            <option value="AR303">AR303</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <span class="block text-sm font-bold text-emerald-800 mb-2">🧪 實驗所使用的藥劑 (可複選) 單位以選項單位為準 <span class="text-red-500">*</span></span>
+                        <div id="chemRowsContainer" class="space-y-2"></div>
+                        <button type="button" onclick="addChemRow()" class="w-full mt-2 bg-white border border-emerald-500 text-emerald-700 font-bold py-1.5 px-4 rounded-md hover:bg-emerald-50 transition text-xs shadow-sm">
+                            ➕ 新增一項藥劑
+                        </button>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-bold text-slate-600">📝 備註欄 (如有使用高危害性藥品請說明用途 / 選填)</label>
+                        <textarea id="chemNote" placeholder="例如：配製高危害試劑、清潔器皿用、實驗儀器異常..." rows="2" class="w-full mt-1 p-2 border border-gray-300 rounded-md bg-white text-sm text-slate-700"></textarea>
+                    </div>
+                    
+                    <button type="submit" id="logChemBtn" class="w-full bg-emerald-600 text-white font-extrabold py-2.5 rounded-xl shadow hover:bg-emerald-700 transition">
+                        送出藥劑消耗登記
+                    </button>
+                </form>
+
+                <div class="lg:col-span-2">
+                    <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                        <table class="w-full text-left text-sm text-gray-600">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                    <th class="p-3 font-bold">藥劑名稱</th><th class="p-3 font-bold">英文名稱</th><th class="p-3 font-bold">化學式</th><th class="p-3 font-bold">CAS No.</th><th class="p-3 font-bold text-right">目前庫存</th><th class="p-3 font-bold text-right">安全存量</th><th class="p-3 font-bold">單位</th><th class="p-3 font-bold text-center">狀態</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chemTableBody" class="divide-y divide-slate-100 bg-white">
+                                <tr><td colspan="8" class="p-8 text-center text-slate-400">正在連線至試算表載入大庫存...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var API_URL = "https://script.google.com/macros/s/AKfycbwPRdOP7n6ysAnjPqaEeKarmy368ahh6jRWcJYN8LofkIyUar4WBSL_GblwVbnSgRPv_g/exec"; 
+        let calendar;
+        let globalChemData = []; 
+
+        document.addEventListener('DOMContentLoaded', () => { initCalendar(); loadChemicals(); });
+
+        function initCalendar() {
+            var calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth', locale: 'zh-tw',
+                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek' },
+                buttonText: { today: '今天', month: '月', week: '週' },
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    fetch(`${API_URL}?action=getBookings`).then(res => res.json()).then(data => successCallback(data)).catch(err => failureCallback(err));
+                },
+                eventClick: function(info) {
+                    var p = info.event.extendedProps;
+                    alert(`【預約詳情】\n實驗室：${info.event.title}\n使用者：${p.user} (${p.id})\n使用用途：${p.purpose || '無'}\n儀器：${p.device}\n備註：${p.note || '無'}`);
+                }
+            });
+            calendar.render();
+        }
+
+        function loadChemicals() {
+            fetch(`${API_URL}?action=getChemicals`)
+            .then(res => res.json()).then(data => {
+                globalChemData = data; 
+                document.getElementById('chemTableBody').innerHTML = '';
+                document.getElementById('chemRowsContainer').innerHTML = ''; 
+                document.getElementById('deviceRowsContainer').innerHTML = ''; 
+                addChemRow(); addDeviceRow();
+
+                data.forEach(chem => {
+                    let isLow = (chem.stock > 0 || chem.safe > 0) && (chem.stock <= chem.safe);
+                    let statusText = isLow ? '⚠️ 需補貨' : '✅ 充足';
+                    if(chem.stock === 0 && chem.safe === 0) statusText = '➖ 未設量';
+                    document.getElementById('chemTableBody').innerHTML += `
+                        <tr class="hover:bg-slate-50 transition ${isLow ? 'bg-red-50 text-red-700 font-bold':''}">
+                            <td class="p-3 font-semibold">${chem.name}</td><td>${chem.english || '—'}</td><td class="font-mono">${chem.formula || '—'}</td><td class="font-mono">${chem.cas || '—'}</td><td class="text-right font-bold">${chem.stock}</td><td class="text-right text-slate-400">${chem.safe}</td><td>${chem.unit || '—'}</td><td class="text-center"><span class="${isLow ? 'low-stock':''}">${statusText}</span></td>
+                        </tr>`;
+                });
+            }).catch(err => alert("載入資料庫失敗，請確認後台權限已開並且網址正確。"));
+        }
+
+        // 🚀 智慧防呆：儀器全部改為強制下拉選單，且預設 required
+        function addDeviceRow() {
+            const container = document.getElementById('deviceRowsContainer');
+            const rowId = 'device_row_' + Date.now();
+            const div = document.createElement('div');
+            div.id = rowId;
+            div.className = "flex space-x-2 items-center device-row bg-white p-1.5 rounded shadow-sm border border-slate-200";
+            div.innerHTML = `
+                <select required class="device-input flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs text-slate-700 font-medium">
+                    <option value="" disabled selected>-- 請選擇儀器 --</option>
+                    <option value="烘箱">烘箱</option>
+                    <option value="天平">天平</option>
+                    <option value="氣相層析儀(GC)">氣相層析儀(GC)</option>
+                    <option value="熱壓機">熱壓機</option>
+                    <option value="FTIR">FTIR</option>
+                    <option value="TGA">TGA</option>
+                    <option value="萬能材料試驗機(UTM)">萬能材料試驗機(UTM)</option>
+                </select>
+                <button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="document.getElementById('${rowId}').remove()">✕</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function addChemRow() {
+            const container = document.getElementById('chemRowsContainer');
+            const rowDiv = document.createElement('div');
+            rowDiv.className = "flex space-x-2 items-center chem-row bg-white p-2 rounded-lg shadow-sm border border-slate-200";
+            let optionsHtml = '<option value="">-- 選擇藥劑 --</option>';
+            globalChemData.forEach(c => { optionsHtml += `<option value="${c.name}">${c.name}${c.unit ? ` (${c.unit})`:''}</option>`; });
+            rowDiv.innerHTML = `<select class="chem-select flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs" required>${optionsHtml}</select><input type="number" step="any" required class="chem-amount w-16 p-1.5 border border-gray-300 rounded bg-white text-xs" placeholder="數量"><button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="this.parentElement.remove()">✕</button>`;
+            container.appendChild(rowDiv);
+        }
+
+        // 送出表單一：實驗室預約
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('bookBtn'); btn.disabled = true; btn.textContent = "預約中...";
+            let selectedDevices = [];
+            document.querySelectorAll('.device-input').forEach(input => { if (input.value.trim()) selectedDevices.push(input.value.trim()); });
+
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "addLabBooking",
+                    data: {
+                        studentId: document.getElementById('bookingId').value,
+                        name: document.getElementById('bookingName').value,
+                        lab: document.getElementById('lab').value,
+                        start: document.getElementById('start').value,
+                        end: document.getElementById('end').value,
+                        device: selectedDevices.join("、"),
+                        purpose: document.getElementById('bookingPurpose').value,
+                        note: document.getElementById('bookingNote').value 
+                    }
+                })
+            }).then(res => res.json()).then(res => {
+                alert(res.message);
+                if(res.status === "success") { 
+                    document.getElementById('bookingForm').reset(); 
+                    document.getElementById('bookingPurpose').value = ''; 
+                    document.getElementById('bookingNote').value = ''; 
+                    calendar.refetchEvents(); 
+                    document.getElementById('deviceRowsContainer').innerHTML = ''; 
+                    addDeviceRow(); 
+                }
+            }).finally(() => { btn.disabled = false; btn.textContent = "送出預約申請"; });
+        });
+
+        // 送出表單二：藥劑消耗
+        document.getElementById('chemForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('logChemBtn'); btn.disabled = true; btn.textContent = "扣除庫存中...";
+            let selectedChems = [];
+            document.querySelectorAll('.chem-row').forEach(row => {
+                let name = row.querySelector('.chem-select').value;
+                let amt = row.querySelector('.chem-amount').value;
+                if (name && amt > 0) selectedChems.push({ name: name, amount: amt });
+            });
+
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "addChemLog",
+                    data: {
+                        studentId: document.getElementById('chemId').value,
+                        name: document.getElementById('chemName').value,
+                        lab: document.getElementById('chemLab').value,
+                        note: document.getElementById('chemNote').value,
+                        chemList: selectedChems
+                    }
+                })
+            }).then(res => res.json()).then(res => {
+                alert(res.message);
+                if(res.status === "success") { document.getElementById('chemForm').reset(); loadChemicals(); }
+            }).finally(() => { btn.disabled = false; btn.textContent = "送出藥劑消耗登記"; });
+        });
+    </script>
+</body>
+</html>
