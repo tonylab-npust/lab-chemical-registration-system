@@ -287,7 +287,7 @@
             container.appendChild(div);
         }
 
-        function addChemRow() {
+       function addChemRow() {
             const container = document.getElementById('chemRowsContainer');
             const rowId = 'chem_row_' + Date.now();
             const div = document.createElement('div');
@@ -295,13 +295,18 @@
             
             let optionsHtml = '<option value="">-- 選擇藥劑 --</option>';
             globalChemData.forEach(c => { 
+                // 🌟 新增：判斷是否有英文名稱，如果有就加上「 - 英文名」
+                let engText = (c.english && c.english.trim() !== "" && c.english !== "—") ? " - " + c.english : "";
                 let unitText = c.unit ? " (" + c.unit + ")" : "";
-                optionsHtml += '<option value="' + c.name + '">' + c.name + unitText + '</option>'; 
+                
+                // 🌟 注意：value 還是維持 c.name，只有兩個 > < 中間的顯示文字改變了
+                optionsHtml += '<option value="' + c.name + '">' + c.name + engText + unitText + '</option>'; 
             });
             
             div.innerHTML = '<select class="chem-select flex-1 p-1.5 border border-gray-300 rounded bg-white text-xs" required>' + optionsHtml + '</select><input type="number" step="any" required class="chem-amount w-16 p-1.5 border border-gray-300 rounded bg-white text-xs" placeholder="數量"><button type="button" class="text-red-400 hover:text-red-600 p-1 font-bold text-sm" onclick="document.getElementById(\'' + rowId + '\').remove()">✕</button>';
             container.appendChild(div);
         }
+        
 
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
             e.preventDefault();
