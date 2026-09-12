@@ -101,13 +101,14 @@ function initCalendar(){
  buttonText:{today:"今天",month:"月",week:"週"},height:675,
  events:async(info,success,failure)=>{
   setText("calendarStatus","正在載入預約…");document.getElementById("retryCalendar").disabled=true;
+  const slowTimer=setTimeout(()=>setText("calendarStatus","Google 後端回應較慢，仍在載入預約，最多等待 60 秒…"),12000);
   try{
    const data=await readAPI("getBookings");if(!Array.isArray(data))throw Error(data.message||"預約資料格式不正確");
    const colors={RE126:"#f97316",RE130:"#3b82f6",RE132:"#ef4444","RE220-1":"#8b5cf6",RE306:"#ec4899",RE308:"#10b981",AR303:"#06b6d4"};
    success(data.map(e=>{const lab=e.extendedProps.lab||(e.title?e.title.split(" - ")[0]:"");return {...e,backgroundColor:colors[lab]||"#64748b",borderColor:colors[lab]||"#64748b"}}));
-   setText("calendarStatus","月曆已更新");
-  }catch(err){setText("calendarStatus","預約載入失敗，請重新載入；目前月曆不可用來判斷空檔。");failure(err)}
-  finally{document.getElementById("retryCalendar").disabled=false;}
+   setText("calendarStatus","月曆已更新，共載入 "+data.length+" 筆預約（包含其他月份）。");
+  }catch(err){setText("calendarStatus","預約載入失敗："+readErrorText(err)+" 目前月曆不可用來判斷空檔。");failure(err)}
+  finally{clearTimeout(slowTimer);document.getElementById("retryCalendar").disabled=false;}
  },
  eventClick:info=>{
   const p=info.event.extendedProps,f=d=>d?d.toLocaleString("zh-TW",{hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
@@ -149,9 +150,15 @@ async function handleCancelBooking(bookingId){
  finally{b.disabled=false;b.textContent="輸入取消碼，取消此筆預約";}
 }
 async function readAPI(action){
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),60000);
  try{const res=await fetch(API_URL+"?action="+encodeURIComponent(action),{signal:controller.signal,cache:"no-store"});if(!res.ok)throw Error("HTTP "+res.status);return await res.json();}
  finally{clearTimeout(timer)}
+}
+function readErrorText(err){
+ if(err.name==="AbortError")return "等待已超過 60 秒，請按重新載入。";
+ if(err instanceof SyntaxError)return "後端未回傳有效資料，請管理員確認部署權限及執行紀錄。";
+ if(err instanceof TypeError)return "瀏覽器未能取得後端回應，請確認網路或部署存取權限後重試。";
+ return err.message||"發生未知錯誤，請重新載入。";
 }
 async function requireBackend(){
  const info=await readAPI("getSystemInfo");
@@ -162,6 +169,7 @@ let chemicalLoading=false,chemicalsReady=false;
 async function loadChemicals(){
  if(chemicalLoading)return;chemicalLoading=true;document.getElementById("retryChemicals").disabled=true;
  setText("chemicalStatus","正在載入庫存…");
+ const slowTimer=setTimeout(()=>setText("chemicalStatus","Google 後端回應較慢，仍在載入庫存，最多等待 60 秒…"),12000);
  try{
   const data=await readAPI("getChemicals");if(!Array.isArray(data))throw Error(data.message||"資料格式不正確");
   globalChemData=data;chemicalsReady=true;
@@ -169,9 +177,9 @@ async function loadChemicals(){
   if(!rows.length)addChemRow();else rows.forEach(row=>fillChemOptions(row));
   renderChemicalTable(document.getElementById("chemSearch").value);setText("chemicalStatus","庫存已更新");
  }catch(err){
-  chemicalsReady=false;setText("chemicalStatus","庫存載入失敗，請重新載入。已填內容會保留。");
+  chemicalsReady=false;setText("chemicalStatus","庫存載入失敗："+readErrorText(err)+" 已填內容會保留。");
   setText("inventoryStats","尚未取得最新庫存");
- }finally{chemicalLoading=false;document.getElementById("retryChemicals").disabled=false;}
+ }finally{clearTimeout(slowTimer);chemicalLoading=false;document.getElementById("retryChemicals").disabled=false;}
 }
 function esc(v){return String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]))}
 function renderChemicalTable(q=""){const k=q.trim().toLowerCase(),rows=globalChemData.filter(c=>[c.name,c.english,c.formula,c.cas].some(v=>String(v||"").toLowerCase().includes(k))),low=globalChemData.filter(c=>(c.stock>0||c.safe>0)&&c.stock<=c.safe).length;setText("inventoryStats",`共 ${globalChemData.length} 項藥劑 · ${low} 項需補貨${k?` · 顯示 ${rows.length} 項`:""}`);const b=document.getElementById("chemTableBody");if(!rows.length){b.innerHTML='<tr class="empty"><td colspan="8">找不到符合條件的藥劑。</td></tr>';return}b.innerHTML=rows.map(c=>{const low=(c.stock>0||c.safe>0)&&c.stock<=c.safe,none=c.stock===0&&c.safe===0,status=none?'<span class="badge none">未設量</span>':low?'<span class="badge low">需補貨</span>':'<span class="badge ok">庫存充足</span>';return `<tr class="${low?"lowrow":""}"><td><b>${esc(c.name)}</b></td><td>${esc(c.english||"—")}</td><td class="mono">${esc(c.formula||"—")}</td><td class="mono">${esc(c.cas||"—")}</td><td class="num"><b>${esc(c.stock)}</b></td><td class="num">${esc(c.safe)}</td><td>${esc(c.unit||"—")}</td><td>${status}</td></tr>`}).join("")}
