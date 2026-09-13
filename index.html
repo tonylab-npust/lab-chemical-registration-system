@@ -44,7 +44,7 @@ body{min-height:100vh}.entry-actions{margin:0 0 26px}.ack{max-width:390px;displa
 <footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB</div></div></footer>
 <div id="detailsModal" class="modalback hidden" role="dialog" aria-modal="true" onclick="if(event.target===this)closeDetailsModal()"><div class="modal"><div class="modalhead"><h3>預約詳細資訊</h3><button class="close" onclick="closeDetailsModal()" aria-label="關閉">×</button></div><dl class="details"><div class="detail"><dt>實驗室</dt><dd id="modalLab"></dd></div><div class="detail"><dt>登記人</dt><dd id="modalUser"></dd></div><div class="detail"><dt>開始時間</dt><dd id="modalStart"></dd></div><div class="detail"><dt>結束時間</dt><dd id="modalEnd"></dd></div><div class="detail"><dt>使用用途</dt><dd id="modalPurpose"></dd></div><div class="detail"><dt>使用儀器</dt><dd id="modalDevice"></dd></div><div class="detail"><dt>備註</dt><dd id="modalNote"></dd></div></dl><button id="modalCancelBtn" class="cancel">取消此筆預約</button></div></div>
 <script>
-var API_URL="https://script.google.com/macros/s/AKfycbw1lcY27lZT58TrWEocxugtK9JFK5Z1u6s_tQtuku0lmU3r-NPc3gcV9DNxv6TiEtOKRw/exec";let calendar,globalChemData=[];
+var API_URL="https://script.google.com/macros/s/AKfycbz0QZdXpeOgmNPyPCuq8iG_eZueiApAonOlNeQgKdtOr7YM1FwObsADBxOrw3F0aNVSSQ/exec";let calendar,globalChemData=[];
 let rulesAccepted=false,chemicalsRequested=false;
 function showView(){
  const requested=location.hash.slice(1);
