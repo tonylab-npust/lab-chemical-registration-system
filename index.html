@@ -103,6 +103,7 @@ body.booking-details-open{overflow:hidden}
 .fc .booking-multiday .lab-full{display:inline}
 .fc .booking-multiday .lab-short{display:none}
 @media(max-width:640px){.fc .fc-daygrid-event.booking-multiday .booking-label-content{flex-direction:row;gap:3px 5px}.fc .booking-multiday .lab-full{display:none}.fc .booking-multiday .lab-short{display:inline}}
+.history-lab-tag{font-size:13px;padding:2px 6px;vertical-align:middle;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -155,10 +156,11 @@ body.booking-details-open{overflow:hidden}
 <div><h3 class="sub">消耗內容</h3><label>使用藥劑 <span class="req">*</span></label><div class="soft" style="margin:-3px 0 9px">可登記多項；消耗量請填純數字，單位以選項標示為準。</div><div id="chemRowsContainer" class="stack"></div><button type="button" class="add" onclick="addChemRow()">＋ 新增一項藥劑</button><div style="margin-top:15px"><label for="chemNote">備註欄 <span class="soft">高危害性藥品請說明用途／選填</span></label><textarea id="chemNote" rows="2" placeholder="如：配製高危害試劑、清潔器皿用"></textarea></div></div></div><div class="submitrow"><button id="logChemBtn" class="primary">送出藥劑消耗登記</button></div></form>
 <details id="chemicalHistory" class="history"><summary>查看藥劑使用紀錄</summary><p>顯示使用者、藥劑、用量及登記時間（台灣時間）。登記時間不等於實際取用時間；舊紀錄未保存時間者會標示「未記錄」。</p><div class="history-actions"><button type="button" class="add" id="historyRefresh">重新整理紀錄</button><span id="historyStatus" role="status">展開後載入最新 50 筆紀錄</span></div><div class="scroll"><table><thead><tr><th>登記時間</th><th>使用者</th><th>實驗室</th><th>藥劑</th><th>用量</th></tr></thead><tbody id="historyBody"></tbody></table></div><button type="button" class="add" id="historyMore" hidden>載入更早紀錄</button></details><div id="inventory" class="inventory"><div class="toolbar"><div><b>實驗室即時庫存總表</b><div id="inventoryStats" class="stats">正在讀取庫存資料…</div></div><input id="chemSearch" class="search" type="search" aria-label="搜尋藥劑" placeholder="搜尋中文、英文、化學式或 CAS No."></div><div class="scroll"><table><thead><tr><th>藥劑名稱</th><th>英文名稱</th><th>化學式</th><th>CAS No.</th><th class="num">目前庫存</th><th class="num">安全存量</th><th>單位</th><th>狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="8">正在連線至試算表並載入庫存…</td></tr></tbody></table></div><div class="tablenote">手機可左右滑動查看完整資料</div></div></div></section>
 </main>
-<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.24-r25</small></div></div></footer>
+<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.24-r26</small></div></div></footer>
 <div id="detailsModal" class="modalback hidden" role="dialog" aria-modal="true" onclick="if(event.target===this)closeDetailsModal()"><div class="modal"><div class="modalhead"><h3>預約詳細資訊</h3><button class="close" onclick="closeDetailsModal()" aria-label="關閉">×</button></div><dl class="details"><div class="detail"><dt>實驗室</dt><dd id="modalLab"></dd></div><div class="detail"><dt>登記人</dt><dd id="modalUser"></dd></div><div class="detail"><dt>開始時間</dt><dd id="modalStart"></dd></div><div class="detail"><dt>結束時間</dt><dd id="modalEnd"></dd></div><div class="detail"><dt>使用用途</dt><dd id="modalPurpose"></dd></div><div class="detail"><dt>使用儀器</dt><dd id="modalDevice"></dd></div><div class="detail"><dt>備註</dt><dd id="modalNote"></dd></div></dl><button id="modalCancelBtn" class="cancel">取消此筆預約</button></div></div>
 <script>
 var API_URL="https://script.google.com/macros/s/AKfycbz0QZdXpeOgmNPyPCuq8iG_eZueiApAonOlNeQgKdtOr7YM1FwObsADBxOrw3F0aNVSSQ/exec";let calendar,globalChemData=[];
+const LAB_COLORS=Object.freeze({RE126:"#527AA3",RE132:"#E69F00","RE220-1":"#7C3AED",RE306:"#00873E",RE308:"#DC2626",AR303:"#52525B",RE130:"#64748b"});
 let rulesAccepted=false,chemicalsRequested=false;
 function showView(){
  const requested=location.hash.slice(1);
@@ -293,7 +295,7 @@ function initCalendar(){
     }
    }
    const data=result.events;
-   const colors={RE126:"#527AA3",RE132:"#E69F00","RE220-1":"#7C3AED",RE306:"#00873E",RE308:"#DC2626",AR303:"#52525B",RE130:"#64748b"};
+   const colors=LAB_COLORS;
    success(data.map(e=>{const lab=e.extendedProps.lab||(e.title?e.title.split(" - ")[0]:"");const color=colors[lab]||"#64748b";const pale="#"+[1,3,5].map(i=>Math.round(255*.88+parseInt(color.slice(i,i+2),16)*.12).toString(16).padStart(2,"0")).join("");return {...e,backgroundColor:"#ffffff",borderColor:color,textColor:"#17201d"}}));
    if(loadNumber===bookingLoadSequence)setText("calendarStatus","月曆已更新");
   }catch(err){if(loadNumber===bookingLoadSequence)setText("calendarStatus","預約載入失敗："+readErrorText(err)+" 目前月曆不可用來判斷空檔。");failure(err)}
@@ -452,6 +454,12 @@ document.getElementById("chemForm").addEventListener("submit",async function(e){
  finally{b.disabled=false;b.textContent="送出藥劑消耗登記";}
 });
 
+function historyLabTag(value){
+ const lab=String(value||"—").trim();
+ const color=Object.prototype.hasOwnProperty.call(LAB_COLORS,lab)?LAB_COLORS[lab]:"#64748b";
+ const ink=lab==="RE132"?"#805800":color;
+ return `<span class="booking-lab-tag history-lab-tag" style="--tag-color:${color};--tag-ink:${ink}">${esc(lab)}</span>`;
+}
 let historyLoaded=false,historyBusy=false,historyBefore=null;
 async function loadChemicalHistory(reset=false){
  if(historyBusy)return;
@@ -460,7 +468,7 @@ async function loadChemicalHistory(reset=false){
  try{
   const data=await readAPI('getChemLogs',reset||historyBefore===null?{}:{before:historyBefore});
   if(!Array.isArray(data.records))throw Error(data.message||'請先更新 Apps Script，再重新整理紀錄。');
-  const html=data.records.map(r=>`<tr><td>${esc(r.submittedAt||'未記錄')}</td><td>${esc(r.name)}</td><td>${esc(r.lab)}</td><td>${esc(r.chemical)}</td><td>${esc(r.amount)}</td></tr>`).join('');
+  const html=data.records.map(r=>`<tr><td>${esc(r.submittedAt||'未記錄')}</td><td>${esc(r.name)}</td><td>${historyLabTag(r.lab)}</td><td>${esc(r.chemical)}</td><td>${esc(r.amount)}</td></tr>`).join('');
   const body=document.getElementById('historyBody');
   if(reset)body.innerHTML='';
   body.insertAdjacentHTML('beforeend',html);
