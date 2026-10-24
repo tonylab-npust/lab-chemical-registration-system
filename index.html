@@ -32,6 +32,17 @@ body{min-height:100vh}.entry-actions{margin:0 0 26px}.ack{max-width:390px;displa
 .fc .fc-event:hover{filter:brightness(.97)}
 .fc .fc-event:focus-visible{outline:2px solid #17201d;outline-offset:2px}
 @media(max-width:640px){.fc .fc-event{padding:3px 2px;border-left-width:3px;font-size:11px}}
+
+.fc .fc-daygrid-event .fc-event-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;overflow-wrap:normal}
+.fc .fc-list-event{border:0;padding:0}
+.fc .fc-list-event td{background:var(--lab-bg,#eef3f0);color:#17201d;border-top:4px solid white;padding:10px 8px}
+.fc .fc-list-event .fc-list-event-time{border-left:4px solid var(--lab-color,#64748b);font-variant-numeric:tabular-nums;white-space:normal;width:105px}
+.fc .fc-list-event .fc-list-event-graphic{display:none}
+.fc .fc-list-event .fc-list-event-title{white-space:normal;overflow-wrap:break-word;font-size:14px}
+.fc .fc-list-day-cushion{background:#eef3f0;padding:10px 8px}
+.fc .fc-list-table{table-layout:fixed}
+.fc .fc-list-table td{vertical-align:middle}
+@media(max-width:640px){.fc .fc-toolbar-chunk{max-width:100%}.fc .fc-list-event td{padding:10px 6px}.fc .fc-list-event .fc-list-event-time{width:90px;font-size:12px}.fc .fc-daygrid-more-link{font-size:11px}}
 </style>
 </head>
 <body>
@@ -143,8 +154,12 @@ let bookingLoadSequence=0;
 function refreshBookings(){bookingRangeCache.clear();if(calendar)calendar.refetchEvents();}
 function initCalendar(){
  calendar=new FullCalendar.Calendar(document.getElementById("calendar"),{
- initialView:"dayGridMonth",locale:"zh-tw",headerToolbar:{left:"prev,next today",center:"title",right:"dayGridMonth,timeGridWeek"},
- buttonText:{today:"今天",month:"月",week:"週"},height:675,
+ initialView:window.matchMedia("(max-width:640px)").matches?"listMonth":"dayGridMonth",locale:"zh-tw",headerToolbar:{left:"prev,next today",center:"title",right:"dayGridMonth,timeGridWeek,listMonth"},
+ buttonText:{today:"今天",month:"月",week:"週",list:"清單"},height:675,
+ views:{dayGridMonth:{dayMaxEvents:2}},
+ moreLinkContent:args=>"＋"+args.num+" 筆",
+ noEventsContent:"這個月份尚無預約",
+ eventDidMount:info=>{if(info.view.type.indexOf("list")===0){info.el.style.setProperty("--lab-bg",info.event.backgroundColor);info.el.style.setProperty("--lab-color",info.event.borderColor);}},
  eventDisplay:"block",
  eventTimeFormat:{hour:"2-digit",minute:"2-digit",hour12:false},
  events:async(info,success,failure)=>{
