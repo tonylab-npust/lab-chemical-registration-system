@@ -43,6 +43,9 @@ body{min-height:100vh}.entry-actions{margin:0 0 26px}.ack{max-width:390px;displa
 .fc .fc-list-table{table-layout:fixed}
 .fc .fc-list-table td{vertical-align:middle}
 @media(max-width:640px){.fc .fc-toolbar-chunk{max-width:100%}.fc .fc-list-event td{padding:10px 6px}.fc .fc-list-event .fc-list-event-time{width:90px;font-size:12px}.fc .fc-daygrid-more-link{font-size:11px}}
+/* Keep FullCalendar's internal popover below the application dialog. */
+.calendarPanel{position:relative;z-index:0;isolation:isolate}
+.modalback{z-index:100}
 </style>
 </head>
 <body>
