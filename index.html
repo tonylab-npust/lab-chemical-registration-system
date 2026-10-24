@@ -22,6 +22,16 @@ body{min-height:100vh}.entry-actions{margin:0 0 26px}.ack{max-width:390px;displa
 @media(max-width:640px){.chem-picker{flex-basis:100%}.chem-picker .chem-select{width:100%}.chem-row .chem-amount{flex-shrink:1}}
 .rule-section{margin-top:22px}.rule-section h3{margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid #ead7a7;color:#674b0d;font-size:17px}.rulesbody .rule-consequence{margin:22px 0 0}
 .lab-legend{display:flex;gap:10px 18px;flex-wrap:wrap;margin:0 0 18px;font-size:13px}.lab-legend span{display:flex;align-items:center;gap:6px}.lab-legend i{width:12px;height:12px;border-radius:50%;display:inline-block}.history{margin-top:18px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:16px}.history summary{cursor:pointer;color:var(--green);font-weight:700}.history-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0}.history-actions button{width:auto;margin:0}.history p{color:var(--muted);font-size:13px}.history .scroll{max-height:420px}
+/* Muted event cards share the laboratory colour with the legend. */
+.fc .fc-event{border-width:0 0 0 4px;border-style:solid;border-radius:4px;padding:4px 5px;box-shadow:none}
+.fc .fc-event .fc-event-main{color:#17201d}
+.fc .fc-daygrid-event .fc-event-main-frame{display:flex;flex-direction:column;min-width:0}
+.fc .fc-daygrid-event .fc-event-time{margin:0;font-weight:600}
+.fc .fc-daygrid-event .fc-event-title{white-space:normal;overflow-wrap:anywhere;font-weight:500}
+.fc .fc-timegrid-event .fc-event-title{overflow-wrap:anywhere}
+.fc .fc-event:hover{filter:brightness(.97)}
+.fc .fc-event:focus-visible{outline:2px solid #17201d;outline-offset:2px}
+@media(max-width:640px){.fc .fc-event{padding:3px 2px;border-left-width:3px;font-size:11px}}
 </style>
 </head>
 <body>
@@ -68,7 +78,7 @@ body{min-height:100vh}.entry-actions{margin:0 0 26px}.ack{max-width:390px;displa
 <div class="full"><label for="bookingPurpose">預約使用用途 <span class="req">*</span></label><input id="bookingPurpose" required placeholder="如：含水率測定、造紙或精油萃取"></div>
 <div class="full"><label for="bookingNote">預約備註 <span class="soft">選填</span></label><textarea id="bookingNote" rows="2" placeholder="如：共同實驗人員、需借用到REXXX"></textarea></div>
 <div class="full repeat"><label>使用儀器 <span class="req">*</span></label><div id="deviceRowsContainer" class="stack"></div><button type="button" class="add" onclick="addDeviceRow()">＋ 新增一台儀器</button></div>
-<div class="full"><button id="bookBtn" class="primary">送出預約申請</button></div></div></form><div class="calendarPanel"><div class="loadbar"><p id="calendarStatus" role="status">月曆尚未載入</p><button id="retryCalendar" type="button" class="add" onclick="retryCalendar()">重新載入月曆</button></div><div class="lab-legend" aria-label="實驗室顏色圖例"><span><i style="background:#b45309"></i>RE126</span><span><i style="background:#b91c1c"></i>RE132</span><span><i style="background:#6d28d9"></i>RE220-1</span><span><i style="background:#1d4ed8"></i>RE306</span><span><i style="background:#047857"></i>RE308</span><span><i style="background:#a21caf"></i>AR303</span></div><div id="calendar"></div></div></div></section>
+<div class="full"><button id="bookBtn" class="primary">送出預約申請</button></div></div></form><div class="calendarPanel"><div class="loadbar"><p id="calendarStatus" role="status">月曆尚未載入</p><button id="retryCalendar" type="button" class="add" onclick="retryCalendar()">重新載入月曆</button></div><div class="lab-legend" aria-label="實驗室顏色圖例"><span><i style="background:#527AA3"></i>RE126</span><span><i style="background:#E69F00"></i>RE132</span><span><i style="background:#7C3AED"></i>RE220-1</span><span><i style="background:#00873E"></i>RE306</span><span><i style="background:#DC2626"></i>RE308</span><span><i style="background:#52525B"></i>AR303</span></div><div id="calendar"></div></div></div></section>
 <section id="chemicals" class="card" hidden tabindex="-1"><div class="head"><p class="kicker">Chemical Management</p><h2>藥劑消耗登記與即時庫存</h2><p class="desc">登記本次用量，系統將同步更新庫存。</p></div><div class="chemwrap">
 <div class="loadbar"><p id="chemicalStatus" role="status">庫存尚未載入</p><button id="retryChemicals" class="add" type="button" onclick="loadChemicals()">重新載入庫存</button></div><form id="chemForm" class="chemform"><div class="chemgrid"><div><h3 class="sub">填報人資訊</h3><div class="fields"><div><label for="chemId">學號 <span class="req">*</span></label><input id="chemId" required placeholder="如：B10919024"></div><div><label for="chemName">姓名 <span class="req">*</span></label><input id="chemName" required placeholder="如：李芷玲"></div><div><label for="chemLab">使用實驗室 <span class="req">*</span></label><select id="chemLab" required><option value="" disabled selected>請選擇實驗室</option><option>RE126</option><option>RE132</option><option>RE220-1</option><option>RE306</option><option>RE308</option><option>AR303</option></select></div></div></div>
 <div><h3 class="sub">消耗內容</h3><label>使用藥劑 <span class="req">*</span></label><div class="soft" style="margin:-3px 0 9px">可登記多項；消耗量請填純數字，單位以選項標示為準。</div><div id="chemRowsContainer" class="stack"></div><button type="button" class="add" onclick="addChemRow()">＋ 新增一項藥劑</button><div style="margin-top:15px"><label for="chemNote">備註欄 <span class="soft">高危害性藥品請說明用途／選填</span></label><textarea id="chemNote" rows="2" placeholder="如：配製高危害試劑、清潔器皿用"></textarea></div></div></div><div class="submitrow"><button id="logChemBtn" class="primary">送出藥劑消耗登記</button></div></form>
@@ -135,6 +145,8 @@ function initCalendar(){
  calendar=new FullCalendar.Calendar(document.getElementById("calendar"),{
  initialView:"dayGridMonth",locale:"zh-tw",headerToolbar:{left:"prev,next today",center:"title",right:"dayGridMonth,timeGridWeek"},
  buttonText:{today:"今天",month:"月",week:"週"},height:675,
+ eventDisplay:"block",
+ eventTimeFormat:{hour:"2-digit",minute:"2-digit",hour12:false},
  events:async(info,success,failure)=>{
   const loadNumber=++bookingLoadSequence;
   const rangeStart=info.startStr.slice(0,10),rangeEnd=info.endStr.slice(0,10),key=rangeStart+"/"+rangeEnd;
@@ -153,8 +165,8 @@ function initCalendar(){
     }
    }
    const data=result.events;
-   const colors={RE126:"#b45309",RE132:"#b91c1c","RE220-1":"#6d28d9",RE306:"#1d4ed8",RE308:"#047857",AR303:"#a21caf",RE130:"#64748b"};
-   success(data.map(e=>{const lab=e.extendedProps.lab||(e.title?e.title.split(" - ")[0]:"");return {...e,backgroundColor:colors[lab]||"#64748b",borderColor:colors[lab]||"#64748b"}}));
+   const colors={RE126:"#527AA3",RE132:"#E69F00","RE220-1":"#7C3AED",RE306:"#00873E",RE308:"#DC2626",AR303:"#52525B",RE130:"#64748b"};
+   success(data.map(e=>{const lab=e.extendedProps.lab||(e.title?e.title.split(" - ")[0]:"");const color=colors[lab]||"#64748b";const pale="#"+[1,3,5].map(i=>Math.round(255*.88+parseInt(color.slice(i,i+2),16)*.12).toString(16).padStart(2,"0")).join("");return {...e,backgroundColor:pale,borderColor:color,textColor:"#17201d"}}));
    if(loadNumber===bookingLoadSequence)setText("calendarStatus","月曆已更新");
   }catch(err){if(loadNumber===bookingLoadSequence)setText("calendarStatus","預約載入失敗："+readErrorText(err)+" 目前月曆不可用來判斷空檔。");failure(err)}
   finally{clearTimeout(slowTimer);if(loadNumber===bookingLoadSequence)document.getElementById("retryCalendar").disabled=false;}
