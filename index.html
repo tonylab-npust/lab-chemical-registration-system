@@ -111,6 +111,12 @@ body.booking-details-open{overflow:hidden}
 .chemical-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.chemical-card{display:flex;align-items:flex-start;gap:12px;padding:16px;border:1px solid #dfe6e2;border-radius:16px;background:white;min-width:0}.formula-tile{display:flex;align-items:center;justify-content:center;background:#f0f5f2;color:#164737;border-radius:12px;min-width:58px;width:58px;min-height:58px;padding:5px;font-size:15px;overflow-wrap:anywhere}.chemical-card-info{flex:1;min-width:0;display:grid;gap:4px;overflow-wrap:anywhere}.chemical-card-info strong{font-size:18px}.chemical-cas{font-size:13px;color:#57665f}.chemical-add{border:1px solid #c8d9d0;background:#f3f7f5;color:#174936;min-width:40px;min-height:40px;border-radius:10px;font-size:23px;cursor:pointer}.chemical-add:disabled{opacity:.5;cursor:default}.chemical-tags{display:flex;gap:5px;flex-wrap:wrap}.chemical-tags span{font-size:12px;border:1px solid #dbe5df;border-radius:6px;padding:2px 6px;color:#486157}.selected-heading{margin-top:28px!important}.selected-chemical.chem-row{display:block;padding:18px;background:#f7faf8;border:1px solid #dce5df;border-radius:14px}.selected-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.selected-fields{display:grid;grid-template-columns:1fr 1.5fr;gap:14px}.selected-fields input{width:100%;min-width:0}.selected-fields label{font-size:14px}#controlFilter{max-width:320px}
 @media(max-width:650px){#chemForm .fields,.chemical-catalog,.selected-fields{grid-template-columns:1fr}.chemical-card{padding:14px;gap:10px}.formula-tile{width:48px;min-width:48px;min-height:48px}.category-chip{padding:8px 12px}#controlFilter{max-width:none}.selected-chemical.chem-row{padding:14px}}
 .chemical-lab-options{display:flex;gap:8px;flex-wrap:wrap}.chemical-lab-choice{cursor:pointer;margin:0}.chemical-lab-choice input{position:absolute;opacity:0;width:1px;min-height:0}.chemical-lab-choice span{display:block;padding:9px 12px;border:1px solid var(--lab-ink);color:var(--lab-ink);border-radius:8px;background:white}.chemical-lab-choice input:checked+span{background:var(--lab-ink);color:white}.chemical-lab-choice input:focus-visible+span{outline:3px solid #aac8ba;outline-offset:3px}#chemForm .fields>div:last-child{grid-column:1/-1}#chemForm .fields{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:650px){#chemForm .fields{grid-template-columns:1fr}}
+
+#chemicalPicker{border:1px solid #dce3df;border-radius:20px;padding:0;width:min(860px,calc(100vw - 32px));max-width:none;height:min(820px,90dvh);max-height:90dvh;color:var(--ink);background:#fff;overflow:hidden}
+#chemicalPicker[open]{display:flex;flex-direction:column}#chemicalPicker::backdrop{background:#071a1499}
+.picker-head,.picker-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;flex-shrink:0;background:#fff}.picker-head{border-bottom:1px solid var(--line)}.picker-head h3{margin:0;color:var(--green)}.picker-foot{border-top:1px solid var(--line)}.picker-foot .primary{width:auto;font-size:14px}.picker-foot span{font-size:13px;white-space:nowrap}
+.picker-scroll{padding:18px 20px;overflow:auto;overscroll-behavior:contain;min-height:0;flex:1}.catalog-pagination{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:16px}.catalog-pagination button:disabled{opacity:.35}.picker-scroll .chemical-card{padding:12px}.picker-scroll .category-tabs{margin:12px 0}.selected-heading{margin-top:18px!important}
+@media(max-width:650px){#chemicalPicker{width:calc(100vw - 16px);height:92dvh;max-height:92dvh;border-radius:16px}.picker-head,.picker-foot{padding:12px}.picker-scroll{padding:12px}.picker-foot .primary{padding:12px;font-size:13px}.picker-scroll .chemical-card-info strong{font-size:16px}}
 </style>
 </head>
 <body>
@@ -163,16 +169,17 @@ body.booking-details-open{overflow:hidden}
 <section id="chemicals" class="card" hidden tabindex="-1"><div class="head"><p class="kicker">Chemical Management</p><h2>藥劑消耗登記與即時庫存</h2><p class="desc">登記本次用量，系統將同步更新庫存。</p></div><div class="chemwrap">
 <div class="loadbar"><p id="chemicalStatus" role="status">庫存尚未載入</p><button id="retryChemicals" class="add" type="button" onclick="loadChemicals()">重新載入庫存</button></div><form id="chemForm" class="chemform"><div class="chemgrid"><div><h3 class="sub">填報人資訊</h3><div class="fields"><div><label for="chemId">學號 <span class="req">*</span></label><input id="chemId" required placeholder="如：B10919024"></div><div><label for="chemName">姓名 <span class="req">*</span></label><input id="chemName" required placeholder="如：李芷玲"></div><div><label for="chemLab">使用實驗室 <span class="req">*</span></label><input id="chemLab" type="hidden"><div class="chemical-lab-options" role="group" aria-label="使用實驗室"><label class="chemical-lab-choice" style="--lab-ink:#527AA3"><input type="radio" name="chemicalLabChoice" value="RE126" required><span>RE126</span></label><label class="chemical-lab-choice" style="--lab-ink:#805800"><input type="radio" name="chemicalLabChoice" value="RE132" required><span>RE132</span></label><label class="chemical-lab-choice" style="--lab-ink:#7C3AED"><input type="radio" name="chemicalLabChoice" value="RE220-1" required><span>RE220-1</span></label><label class="chemical-lab-choice" style="--lab-ink:#00873E"><input type="radio" name="chemicalLabChoice" value="RE306" required><span>RE306</span></label><label class="chemical-lab-choice" style="--lab-ink:#DC2626"><input type="radio" name="chemicalLabChoice" value="RE308" required><span>RE308</span></label><label class="chemical-lab-choice" style="--lab-ink:#52525B"><input type="radio" name="chemicalLabChoice" value="AR303" required><span>AR303</span></label></div></div></div></div>
 <div><h3 class="sub">選擇藥劑 <span class="req">*</span></h3>
-<label for="catalogSearch">搜尋藥劑</label><input id="catalogSearch" type="search" placeholder="中文、英文、化學式或 CAS 號碼">
-<div id="chemicalCategories" class="category-tabs" aria-label="藥劑分類"></div>
-<label for="controlFilter">管理分類</label><select id="controlFilter"><option value="">全部管理分類</option><option>毒性化學物質</option><option>關注化學物質</option><option>先驅化學品</option></select>
-<p id="catalogCount" class="soft" role="status"></p><div id="chemicalCatalog" class="chemical-catalog"></div>
-<h3 class="sub selected-heading">已選藥劑 <span class="req">*</span></h3><p id="selectedEmpty" class="soft">請從上方卡片加入藥劑，再填寫實際使用量。</p>
+<button type="button" id="chooseChemicalButton" class="add" onclick="openChemicalPicker()">＋ 選擇／新增藥劑</button><h3 class="sub selected-heading">已選藥劑 <span class="req">*</span></h3><p id="selectedEmpty" class="soft">點「選擇／新增藥劑」，加入本次使用的品項。</p>
 <div id="chemRowsContainer" class="stack"></div>
 <div style="margin-top:15px"><label for="chemNote">其他備註 <span class="soft">選填</span></label><textarea id="chemNote" rows="2" placeholder="需要補充的事項"></textarea></div></div></div><div class="submitrow"><button id="logChemBtn" class="primary">送出藥劑消耗登記</button></div></form>
-<details id="chemicalHistory" class="history"><summary>查看藥劑使用紀錄</summary><p>顯示使用者、藥劑、用量及登記時間（台灣時間）。登記時間不等於實際取用時間；舊紀錄未保存時間者會標示「未記錄」。</p><div class="history-actions"><button type="button" class="add" id="historyRefresh">重新整理紀錄</button><span id="historyStatus" role="status">展開後載入最新 50 筆紀錄</span></div><div class="scroll"><table><thead><tr><th>登記時間</th><th>使用者</th><th>實驗室</th><th>藥劑</th><th>用量</th></tr></thead><tbody id="historyBody"></tbody></table></div><button type="button" class="add" id="historyMore" hidden>載入更早紀錄</button></details><div id="inventory" class="inventory"><div class="toolbar"><div><b>實驗室即時庫存總表</b><div id="inventoryStats" class="stats">正在讀取庫存資料…</div></div><input id="chemSearch" class="search" type="search" aria-label="搜尋藥劑" placeholder="搜尋中文、英文、化學式或 CAS No."></div><div class="scroll"><table><thead><tr><th>藥劑名稱</th><th>英文名稱</th><th>化學式</th><th>CAS No.</th><th class="num">目前庫存</th><th class="num">安全存量</th><th>單位</th><th>狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="8">正在連線至試算表並載入庫存…</td></tr></tbody></table></div><div class="tablenote">手機可左右滑動查看完整資料</div></div></div></section>
+<details id="chemicalHistory" class="history"><summary>查看藥劑使用紀錄</summary><p>顯示使用者、藥劑、用量及登記時間（台灣時間）。登記時間不等於實際取用時間；舊紀錄未保存時間者會標示「未記錄」。</p><div class="history-actions"><button type="button" class="add" id="historyRefresh">重新整理紀錄</button><span id="historyStatus" role="status">展開後載入最新 50 筆紀錄</span></div><div class="scroll"><table><thead><tr><th>登記時間</th><th>使用者</th><th>實驗室</th><th>藥劑</th><th>用量</th></tr></thead><tbody id="historyBody"></tbody></table></div><button type="button" class="add" id="historyMore" hidden>載入更早紀錄</button></details><details id="inventoryDisclosure" class="history"><summary>查看即時庫存總表</summary><div id="inventory" class="inventory"><div class="toolbar"><div><b>實驗室即時庫存總表</b><div id="inventoryStats" class="stats">正在讀取庫存資料…</div></div><input id="chemSearch" class="search" type="search" aria-label="搜尋藥劑" placeholder="搜尋中文、英文、化學式或 CAS No."></div><div class="scroll"><table><thead><tr><th>藥劑名稱</th><th>英文名稱</th><th>化學式</th><th>CAS No.</th><th class="num">目前庫存</th><th class="num">安全存量</th><th>單位</th><th>狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="8">正在連線至試算表並載入庫存…</td></tr></tbody></table></div><div class="tablenote">手機可左右滑動查看完整資料</div></div></details></div></section>
 </main>
-<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.24-r28</small></div></div></footer>
+<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r29</small></div></div></footer>
+<dialog id="chemicalPicker" aria-labelledby="chemicalPickerTitle"><div class="picker-head"><h3 id="chemicalPickerTitle">選擇藥劑</h3><button type="button" class="close" onclick="closeChemicalPicker()" aria-label="關閉藥劑選擇">×</button></div><div class="picker-scroll"><label for="catalogSearch">搜尋藥劑</label><input id="catalogSearch" type="search" placeholder="中文、英文、化學式或 CAS 號碼">
+<div id="chemicalCategories" class="category-tabs" aria-label="藥劑分類"></div>
+<label for="controlFilter">管理分類</label><select id="controlFilter"><option value="">全部管理分類</option><option>毒性化學物質</option><option>關注化學物質</option><option>先驅化學品</option></select>
+<p id="catalogCount" class="soft" role="status"></p><div id="chemicalCatalog" class="chemical-catalog"></div><div class="catalog-pagination"><button type="button" id="catalogPrev" class="close" aria-label="上一頁藥劑">‹</button><span id="catalogPage"></span><button type="button" id="catalogNext" class="close" aria-label="下一頁藥劑">›</button></div>
+</div><div class="picker-foot"><span id="pickerSelectedCount" role="status">已選 0 項</span><button type="button" class="primary" onclick="closeChemicalPicker(true)">完成選擇，填寫用量</button></div></dialog>
 <div id="detailsModal" class="modalback hidden" role="dialog" aria-modal="true" onclick="if(event.target===this)closeDetailsModal()"><div class="modal"><div class="modalhead"><h3>預約詳細資訊</h3><button class="close" onclick="closeDetailsModal()" aria-label="關閉">×</button></div><dl class="details"><div class="detail"><dt>實驗室</dt><dd id="modalLab"></dd></div><div class="detail"><dt>登記人</dt><dd id="modalUser"></dd></div><div class="detail"><dt>開始時間</dt><dd id="modalStart"></dd></div><div class="detail"><dt>結束時間</dt><dd id="modalEnd"></dd></div><div class="detail"><dt>使用用途</dt><dd id="modalPurpose"></dd></div><div class="detail"><dt>使用儀器</dt><dd id="modalDevice"></dd></div><div class="detail"><dt>備註</dt><dd id="modalNote"></dd></div></dl><button id="modalCancelBtn" class="cancel">取消此筆預約</button></div></div>
 <script>
 var API_URL="https://script.google.com/macros/s/AKfycbz0QZdXpeOgmNPyPCuq8iG_eZueiApAonOlNeQgKdtOr7YM1FwObsADBxOrw3F0aNVSSQ/exec";let calendar,globalChemData=[];
@@ -404,20 +411,25 @@ function addDeviceRow(){
  d.innerHTML='<input required class="device-input" aria-label="使用儀器" placeholder="如：烘箱、恆溫水浴槽"><button type="button" class="remove" aria-label="移除此儀器" onclick="removeEntry(this,\'.device-row\')">×</button>';
  document.getElementById("deviceRowsContainer").appendChild(d);
 }
-let catalogCategory="全部",catalogLimit=24;
+let catalogCategory="全部",catalogPage=0;
 const catalogCategories=["全部","固體","溶劑","酸類","鹼類","其他","未分類"];
 function chemTags(c){return Array.isArray(c.categories)?c.categories:[];}
 function needsPurpose(c){return !c||c.purposeRequired!==false;}
 function renderChemicalCatalog(){
  const q=document.getElementById("catalogSearch").value.trim().toLowerCase(),control=document.getElementById("controlFilter").value;
  document.getElementById("chemicalCategories").innerHTML=catalogCategories.map(t=>`<button type="button" class="category-chip ${catalogCategory===t?"active":""}" aria-pressed="${catalogCategory===t}">${t}</button>`).join("");
- document.querySelectorAll(".category-chip").forEach(b=>b.onclick=()=>{catalogCategory=b.textContent;catalogLimit=24;renderChemicalCatalog()});
+ document.querySelectorAll(".category-chip").forEach(b=>b.onclick=()=>{catalogCategory=b.textContent;catalogPage=0;renderChemicalCatalog()});
  const rows=globalChemData.filter(c=>(!q||[c.name,c.english,c.formula,c.cas].some(v=>String(v||"").toLowerCase().includes(q)))&&(catalogCategory==="全部"||(catalogCategory==="未分類"?!chemTags(c).length:chemTags(c).includes(catalogCategory)))&&(!control||(c.controlCategories||[]).includes(control)));
  setText("catalogCount",`找到 ${rows.length} 項藥劑`);
+ catalogPage=Math.min(catalogPage,Math.max(0,Math.ceil(rows.length/6)-1));
  const selected=new Set([...document.querySelectorAll(".chem-row")].map(r=>r.dataset.name));
- document.getElementById("chemicalCatalog").innerHTML=rows.slice(0,catalogLimit).map(c=>`<article class="chemical-card"><div class="formula-tile">${esc(c.formula||"—")}</div><div class="chemical-card-info"><strong>${esc(c.name)}</strong><span class="soft">${esc(c.english||"—")}</span><span class="chemical-cas">CAS ${esc(c.cas||"未提供")}</span><span class="soft">${esc(c.spec||"")}</span><div class="chemical-tags">${(chemTags(c).length?chemTags(c):["未分類"]).concat(c.controlCategories||[]).map(t=>`<span>${esc(t)}</span>`).join("")}</div><small>單位：${esc(c.unit||"未設定")} · ${needsPurpose(c)?'用途必填 <span class="req">*</span>':'用途選填'}</small></div><button type="button" class="chemical-add" data-name="${esc(c.name)}" aria-label="加入${esc(c.name)}" ${selected.has(c.name)?"disabled":""}>${selected.has(c.name)?"✓":"＋"}</button></article>`).join("")||'<p class="soft">沒有符合條件的藥劑，請更換分類或關鍵字。</p>';
+ document.getElementById("chemicalCatalog").innerHTML=rows.slice(catalogPage*6,catalogPage*6+6).map(c=>`<article class="chemical-card"><div class="formula-tile">${esc(c.formula||"—")}</div><div class="chemical-card-info"><strong>${esc(c.name)}</strong><span class="soft">${esc(c.english||"—")}</span><span class="chemical-cas">CAS ${esc(c.cas||"未提供")}</span><span class="soft">${esc(c.spec||"")}</span><div class="chemical-tags">${(chemTags(c).length?chemTags(c):["未分類"]).concat(c.controlCategories||[]).map(t=>`<span>${esc(t)}</span>`).join("")}</div><small>單位：${esc(c.unit||"未設定")} · ${needsPurpose(c)?'用途必填 <span class="req">*</span>':'用途選填'}</small></div><button type="button" class="chemical-add" data-name="${esc(c.name)}" aria-label="加入${esc(c.name)}" ${selected.has(c.name)?"disabled":""}>${selected.has(c.name)?"✓":"＋"}</button></article>`).join("")||'<p class="soft">沒有符合條件的藥劑，請更換分類或關鍵字。</p>';
  document.querySelectorAll(".chemical-add").forEach(b=>b.onclick=()=>addChemRow(b.dataset.name));
- if(rows.length>catalogLimit){const b=document.createElement("button");b.type="button";b.className="add";b.textContent="顯示更多藥劑";b.onclick=()=>{catalogLimit+=24;renderChemicalCatalog()};document.getElementById("chemicalCatalog").appendChild(b)}
+ const pages=Math.max(1,Math.ceil(rows.length/6));
+ setText("catalogPage",`${catalogPage+1} / ${pages} 頁`);
+ document.getElementById("catalogPrev").disabled=catalogPage===0;
+ document.getElementById("catalogNext").disabled=catalogPage>=pages-1;
+ setText("pickerSelectedCount",`已選 ${selected.size} 項`);
  document.getElementById("selectedEmpty").hidden=selected.size>0;
 }
 function refreshSelectedRules(){
@@ -435,12 +447,22 @@ function addChemRow(name){
  d.innerHTML=`<div class="selected-title"><div><strong>${esc(c.name)}</strong><div class="soft">CAS ${esc(c.cas||"未提供")}</div></div><button type="button" class="remove" aria-label="移除${esc(c.name)}">×</button></div><div class="selected-fields"><div><label for="${uid}-amount">使用量 <span class="req">*</span>（${esc(c.unit||"未設定單位")}）</label><input id="${uid}-amount" type="number" step="any" min="0" required class="chem-amount" placeholder="請填實際使用量"></div><div><label for="${uid}-purpose">使用用途 <span class="purpose-marker"></span></label><input id="${uid}-purpose" class="chem-purpose" maxlength="500" placeholder="如：配製溶液、清洗器皿"></div></div>`;
  d.querySelector(".remove").onclick=()=>{d.remove();renderChemicalCatalog()};
  d.querySelector(".chem-amount").oninput=function(){this.setCustomValidity(Number(this.value)>0?"":"使用量必須大於 0")};
- document.getElementById("chemRowsContainer").appendChild(d);refreshSelectedRules();renderChemicalCatalog();d.querySelector("input").focus();
+ document.getElementById("chemRowsContainer").appendChild(d);refreshSelectedRules();renderChemicalCatalog();document.querySelector("#chemicalPicker .picker-foot button").focus({preventScroll:true});
 }
+function openChemicalPicker(){
+ const dialog=document.getElementById("chemicalPicker");catalogPage=0;renderChemicalCatalog();dialog.showModal();document.body.style.overflow="hidden";
+ document.getElementById("catalogSearch").focus({preventScroll:true});
+}
+function closeChemicalPicker(fill=false){
+ document.getElementById("chemicalPicker").close();
+ if(fill){const input=document.querySelector(".chem-row .chem-amount");if(input)input.focus();}
+}
+document.getElementById("chemicalPicker").addEventListener("close",()=>{document.body.style.overflow="";});
+["catalogPrev","catalogNext"].forEach((id,i)=>document.getElementById(id).onclick=()=>{catalogPage+=i?1:-1;renderChemicalCatalog();document.querySelector(".picker-scroll").scrollTop=0;});
 let chemicalItemSequence=0;
 document.querySelectorAll('[name="chemicalLabChoice"]').forEach(r=>r.addEventListener("change",()=>{document.getElementById("chemLab").value=r.value}));
-document.getElementById("catalogSearch").addEventListener("input",()=>{catalogLimit=24;renderChemicalCatalog()});
-document.getElementById("controlFilter").addEventListener("change",()=>{catalogLimit=24;renderChemicalCatalog()});
+document.getElementById("catalogSearch").addEventListener("input",()=>{catalogPage=0;renderChemicalCatalog()});
+document.getElementById("controlFilter").addEventListener("change",()=>{catalogPage=0;renderChemicalCatalog()});
 function showBookingReceipt(r){
  const receipt=document.getElementById("bookingReceipt");
  receipt.innerHTML='<h3>預約已完成</h3><p>進入實驗室後請於群組報到；使用藥劑後請另行登記。</p><p>如需取消，請點選月曆中的預約，輸入登記學號即可。</p>';
@@ -475,7 +497,7 @@ document.getElementById("chemForm").addEventListener("submit",async function(e){
   const info=await requireBackend();if(!info.chemicalCatalog)throw Error("請先更新 Apps Script 並執行 setupSystem，再使用新版藥劑登記。");sending=true;
   const r=await post({action:"addChemLog",data:{studentId:v("chemId"),name:v("chemName"),lab:v("chemLab"),note:v("chemNote"),chemList:list}});
   if(r.status!=="success"){alert(r.message);return}
-  alert(r.message);this.reset();setText("chemRowsContainer","");catalogCategory="全部";catalogLimit=24;await loadChemicals();historyLoaded=false;if(document.getElementById("chemicalHistory").open)await loadChemicalHistory(true);
+  alert(r.message);this.reset();setText("chemRowsContainer","");catalogCategory="全部";catalogPage=0;await loadChemicals();historyLoaded=false;if(document.getElementById("chemicalHistory").open)await loadChemicalHistory(true);
  }catch(err){alert(sending?"尚未確認登記結果，請先請管理員查核 ChemLogs，避免重複扣庫存。":err.message);}
  finally{b.disabled=false;b.textContent="送出藥劑消耗登記";}
 });
