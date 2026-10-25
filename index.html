@@ -190,6 +190,14 @@ body.booking-details-open{overflow:hidden}
 #calendar .fc-list-day:not(:first-child) th{padding-top:10px}
 #calendar .fc-list-table{margin-top:0}
 @media(max-width:640px){#calendar .fc-list-event{grid-template-columns:88px minmax(0,1fr)}#calendar .fc-list-event .booking-label-content{grid-template-columns:72px minmax(0,1fr)}#calendar .fc-list-event .fc-list-event-time{font-size:12px;padding:11px 4px}#calendar .fc-list-event .booking-lab-tag{font-size:11px;margin-left:4px;padding:2px 3px}#calendar .fc-list-event .booking-label-user{font-size:12px;padding:0 4px}#calendar .fc-list-day-cushion{padding:11px 6px 7px}#calendar .fc-list-day-side-text{font-size:12px}}
+/* r46 inline instrument controls and consistent disclosure arrows */
+.device-section{padding:0;border:0;background:transparent}.device-row input{flex:1;min-width:0}.device-row button{flex:0 0 40px;width:40px;height:44px;border-radius:10px;cursor:pointer}.device-add{border:1px solid #cbdcd2;background:white;color:var(--green);font-size:23px}.device-row button[hidden]{display:none!important}
+#chemicalHistory>summary,#inventoryDisclosure>summary{display:flex;align-items:center;gap:10px;list-style:none;min-height:44px;justify-content:flex-start}
+#chemicalHistory>summary::-webkit-details-marker,#inventoryDisclosure>summary::-webkit-details-marker{display:none}
+#chemicalHistory>summary::marker,#inventoryDisclosure>summary::marker{content:''}
+#chemicalHistory>summary::before,#inventoryDisclosure>summary::before{content:'';display:block;width:7px;height:7px;flex:0 0 7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin:0 3px;transition:transform .15s}
+#chemicalHistory[open]>summary::before,#inventoryDisclosure[open]>summary::before{transform:rotate(45deg)}
+#inventoryDisclosure>summary .add{margin-left:auto}
 </style>
 </head>
 <body>
@@ -237,7 +245,7 @@ body.booking-details-open{overflow:hidden}
 <fieldset class="time-field"><legend>開始時間 <span class="req">*</span></legend><input type="hidden" id="startDate"><button type="button" class="time-open date-open" id="startDateButton" onclick="openDatePicker('start')" aria-haspopup="dialog" aria-label="選擇開始日期">選擇日期 <span>▦</span></button><div class="time-parts"><button class="time-open" id="startTimeButton" type="button" onclick="openTimePicker('start')" aria-haspopup="dialog">選擇時間 <span>◷</span></button><input type="hidden" id="startHour"><input type="hidden" id="startMinute"></div><input type="hidden" id="start"></fieldset><fieldset class="time-field"><legend>結束時間 <span class="req">*</span></legend><input type="hidden" id="endDate"><button type="button" class="time-open date-open" id="endDateButton" onclick="openDatePicker('end')" aria-haspopup="dialog" aria-label="選擇結束日期">選擇日期 <span>▦</span></button><div class="time-parts"><button class="time-open" id="endTimeButton" type="button" onclick="openTimePicker('end')" aria-haspopup="dialog">選擇時間 <span>◷</span></button><input type="hidden" id="endHour"><input type="hidden" id="endMinute"></div><input type="hidden" id="end"></fieldset>
 <div class="full"><label for="bookingPurpose">預約使用用途 <span class="req">*</span></label><input id="bookingPurpose" required placeholder="如：含水率測定、造紙或精油萃取"></div>
 <div class="full"><label for="bookingNote">預約備註 <span class="soft">選填</span></label><textarea id="bookingNote" rows="2" placeholder="如：共同實驗人員、需借用到REXXX"></textarea></div>
-<div class="full repeat"><label>使用儀器 <span class="req">*</span></label><div id="deviceRowsContainer" class="stack"></div><button type="button" class="add" onclick="addDeviceRow()">＋ 新增一台儀器</button></div>
+<div class="full device-section"><label>使用儀器 <span class="req">*</span></label><div id="deviceRowsContainer" class="stack"></div></div>
 <div class="full"><button id="bookBtn" class="primary">送出預約申請</button></div></div></form><div class="calendarPanel"><div class="loadbar"><p id="calendarStatus" role="status">月曆尚未載入</p><button id="retryCalendar" type="button" class="add" onclick="retryCalendar()">重新載入月曆</button></div><div id="calendar"></div></div></div></section>
 <section id="chemicals" class="card" hidden tabindex="-1"><div class="head"><p class="kicker">Chemical Management</p><h2>藥劑消耗登記與即時庫存</h2><p class="desc">登記本次用量，系統將同步更新庫存。</p></div><div class="chemwrap">
 <form id="chemForm" class="chemform"><div class="chemgrid"><div><div class="fields"><div><label for="chemId">學號 <span class="req">*</span></label><input id="chemId" required placeholder="如：B10919024"></div><div><label for="chemName">姓名 <span class="req">*</span></label><input id="chemName" required placeholder="如：李芷玲"></div><div><label for="chemLab">使用實驗室 <span class="req">*</span></label><input id="chemLab" type="hidden"><div class="chemical-lab-options" role="group" aria-label="使用實驗室"><label class="chemical-lab-choice" style="--lab-ink:#527AA3"><input type="radio" name="chemicalLabChoice" value="RE126" required><span>RE126</span></label><label class="chemical-lab-choice" style="--lab-ink:#805800"><input type="radio" name="chemicalLabChoice" value="RE132" required><span>RE132</span></label><label class="chemical-lab-choice" style="--lab-ink:#7C3AED"><input type="radio" name="chemicalLabChoice" value="RE220-1" required><span>RE220-1</span></label><label class="chemical-lab-choice" style="--lab-ink:#00873E"><input type="radio" name="chemicalLabChoice" value="RE306" required><span>RE306</span></label><label class="chemical-lab-choice" style="--lab-ink:#DC2626"><input type="radio" name="chemicalLabChoice" value="RE308" required><span>RE308</span></label><label class="chemical-lab-choice" style="--lab-ink:#52525B"><input type="radio" name="chemicalLabChoice" value="AR303" required><span>AR303</span></label></div></div></div></div>
@@ -250,7 +258,7 @@ body.booking-details-open{overflow:hidden}
 <div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th scope="col">藥劑資料</th><th scope="col" class="inventory-category-cell">分類</th><th scope="col" class="num">目前庫存</th><th scope="col">庫存狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="4">正在載入庫存…</td></tr></tbody></table></div>
 <div class="inventory-pagination"><button id="inventoryPrev" class="close" type="button" aria-label="上一頁庫存">‹</button><span id="inventoryPage" role="status">1 / 1 頁</span><button id="inventoryNext" class="close" type="button" aria-label="下一頁庫存">›</button></div><div class="tablenote">每頁 10 項 · 空白庫存與已用完分開標示</div></div></details></div></section>
 </main>
-<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r45</small></div></div></footer>
+<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r46</small></div></div></footer>
 <dialog id="chemicalPicker" aria-labelledby="chemicalPickerTitle"><div class="picker-head"><h3 id="chemicalPickerTitle">選擇藥劑</h3><button type="button" class="close" onclick="closeChemicalPicker()" aria-label="關閉藥劑選擇">×</button></div><div class="picker-scroll"><label for="catalogSearch">搜尋藥劑</label><input id="catalogSearch" type="search" placeholder="中文、英文、化學式或 CAS 號碼">
 <div id="chemicalCategories" class="category-tabs" aria-label="藥劑分類"></div>
 <p class="category-help soft">同一藥劑可有多個標籤；其他選項請點「更多分類」。</p>
@@ -528,10 +536,16 @@ function removeEntry(button,selector){
  if(row.parentElement.querySelectorAll(selector).length<=1){alert("至少保留一項"+(selector===".device-row"?"儀器":"藥劑")+"。");return;}
  row.remove();
 }
-function addDeviceRow(){
- const d=document.createElement("div");d.className="device-row";
- d.innerHTML='<input required class="device-input" aria-label="使用儀器" placeholder="如：烘箱、恆溫水浴槽"><button type="button" class="remove" aria-label="移除此儀器" onclick="removeEntry(this,\'.device-row\')">×</button>';
- document.getElementById("deviceRowsContainer").appendChild(d);
+function updateDeviceControls(){
+ const rows=[...document.querySelectorAll('#deviceRowsContainer .device-row')];
+ rows.forEach((row,i)=>{row.querySelector('.remove').hidden=rows.length===1;row.querySelector('.device-add').hidden=i!==rows.length-1;});
+}
+function addDeviceRow(focus=false){
+ const d=document.createElement('div');d.className='device-row';
+ d.innerHTML='<input required class="device-input" aria-label="使用儀器" placeholder="如：烘箱、恆溫水浴槽"><button type="button" class="remove" aria-label="移除此儀器">×</button><button type="button" class="device-add" aria-label="新增一台儀器">＋</button>';
+ d.querySelector('.remove').onclick=()=>{const rows=[...document.querySelectorAll('#deviceRowsContainer .device-row')];if(rows.length<2)return;const index=rows.indexOf(d);d.remove();updateDeviceControls();document.querySelectorAll('#deviceRowsContainer .device-input')[Math.min(index,rows.length-2)].focus({preventScroll:true});};
+ d.querySelector('.device-add').onclick=()=>addDeviceRow(true);
+ document.getElementById('deviceRowsContainer').appendChild(d);updateDeviceControls();if(focus)d.querySelector('input').focus();
 }
 let catalogCategory="全部",catalogPage=0;
 const catalogCategories=["全部","固體","液體","溶劑","酸類","鹼類","毒性化學物質","關注化學物質","先驅化學品","其他","未分類"];
