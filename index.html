@@ -138,6 +138,24 @@ body.booking-details-open{overflow:hidden}
 @media(max-width:420px){#datePicker{padding:20px}.date-preview strong{font-size:23px}}
 #bookingSuccess{width:min(460px,calc(100vw - 24px));max-height:88dvh;overflow:auto;border:0;border-radius:26px;padding:28px;color:var(--ink);background:white;box-shadow:0 18px 60px #0003}#bookingSuccess::backdrop{background:#102d2466}.success-close{position:absolute;right:16px;top:12px;border:0;background:transparent;color:#78847d;font-size:28px;cursor:pointer}.success-heading{text-align:center;padding:5px 0 20px}.success-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:#edf4eb;color:#155a45;font-size:32px}.success-heading h3{margin:0;font-size:27px;color:var(--green)}.success-details{display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px 16px;margin:0;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:15px}.success-details dt{color:var(--muted)}.success-details dd{margin:0;overflow-wrap:anywhere}.success-note{font-size:14px;line-height:1.7;margin:18px 0}.success-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.success-actions button{min-width:0;min-height:46px;padding:12px 6px;border-radius:16px;font-weight:700;font-size:14px;white-space:nowrap;cursor:pointer;background:white;color:var(--green);border:1px solid #cbdcd2}.success-actions .success-main{background:var(--green);color:white;border-color:var(--green)}.success-cancel-note{font-size:12px;color:var(--muted);margin:14px 0 0}.calendarPanel,#bookingForm{scroll-margin-top:100px}@media(max-width:420px){#bookingSuccess{padding:24px 20px}.success-details{gap:10px;font-size:14px;grid-template-columns:72px minmax(0,1fr)}}
 #detailsModal .modal{width:min(460px,calc(100vw - 24px));max-width:460px;max-height:88dvh;border-radius:26px;padding:26px;overflow-y:auto}#detailsModal .modalhead{border-bottom:0;margin-bottom:16px;padding-bottom:0}#detailsModal .modalhead h3{color:var(--green);font-size:23px}#detailsModal .close{background:transparent;border:0;font-size:28px;color:#78847d;padding:0;width:32px;height:36px}#detailsModal .detail{grid-template-columns:78px minmax(0,1fr);gap:14px;padding:8px 0;font-size:15px}#detailsModal dd{overflow-wrap:anywhere;white-space:pre-wrap}#detailsModal .detail:nth-child(5){border-top:1px solid var(--line);padding-top:18px;margin-top:10px}.details-actions{display:flex;justify-content:flex-end;margin-top:22px}.details-actions[hidden]{display:none}#detailsModal .cancel{width:auto;margin:0;background:white;border:1px solid #d4a8a5;color:#a5221a;border-radius:16px;padding:11px 20px;font-size:14px}#detailsModal .cancel:disabled{color:#69756f;border-color:#dce3df;cursor:default}#cancelBookingForm{border-top:1px solid var(--line);margin-top:18px;padding-top:18px}#cancelBookingForm h4{margin:0 0 8px;color:#a5221a}#cancelBookingForm p{font-size:13px;margin:8px 0}#cancelStudentId{border-radius:14px}#cancelBookingError{color:#a5221a}.cancel-confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.cancel-confirm-actions button{min-width:0;border:1px solid #cbdcd2;border-radius:16px;background:white;color:var(--green);padding:12px 8px;font-weight:700;cursor:pointer}#cancelConfirmBtn{background:#a5221a;border-color:#a5221a;color:white}.cancel-confirm-actions button:disabled{opacity:.55;cursor:wait}@media(max-width:420px){#detailsModal .modal{padding:22px 20px}#detailsModal .detail{grid-template-columns:70px minmax(0,1fr);gap:10px;font-size:14px}}
+/* r40 compact booking details and separate cancellation step */
+#detailsModal .modal{padding:24px;max-height:88dvh}
+#detailsModal .modalhead{margin-bottom:20px}
+#detailsModal .modalhead h3{margin:0;font-size:22px}
+.detail-identity{display:flex;align-items:center;gap:14px;font-size:16px;font-weight:600;margin-bottom:14px}
+.detail-date-row{display:flex;align-items:baseline;gap:12px;white-space:nowrap;font-size:16px;line-height:1.6;font-variant-numeric:tabular-nums}
+#bookingDetailFields{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+#bookingDetailFields[hidden]{display:none}
+#detailsModal .detail{padding:7px 0;line-height:1.5;gap:14px}
+#detailsModal .detail dt,#detailsModal .detail dd{margin:0}
+#detailsModal .details-actions{margin-top:18px}
+#detailsModal.cancelling #bookingDetailSummary{background:#f4f6f5;border-radius:16px;padding:16px;margin-bottom:20px}
+#cancelBookingForm{border:0;margin:0;padding:0}
+#cancelBookingForm label{display:block;margin-bottom:8px}
+#cancelStudentId{font-size:16px;padding:12px;width:100%;min-width:0}
+#cancelStudentId::placeholder{font-size:14px}
+#cancelBookingError:empty{display:none}
+@media(max-width:420px){#detailsModal .modal{padding:20px}#detailsModal .modalhead h3{font-size:21px}.detail-date-row{font-size:14px;gap:9px}.detail-identity{font-size:15px}#detailsModal.cancelling #bookingDetailSummary{padding:12px}#detailsModal .detail{font-size:14px}}
 </style>
 </head>
 <body>
@@ -198,13 +216,13 @@ body.booking-details-open{overflow:hidden}
 <div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th scope="col">藥劑資料</th><th scope="col" class="inventory-category-cell">分類</th><th scope="col" class="num">目前庫存</th><th scope="col">庫存狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="4">正在載入庫存…</td></tr></tbody></table></div>
 <div class="inventory-pagination"><button id="inventoryPrev" class="close" type="button" aria-label="上一頁庫存">‹</button><span id="inventoryPage" role="status">1 / 1 頁</span><button id="inventoryNext" class="close" type="button" aria-label="下一頁庫存">›</button></div><div class="tablenote">每頁 10 項 · 空白庫存與已用完分開標示</div></div></details></div></section>
 </main>
-<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r39</small></div></div></footer>
+<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r40</small></div></div></footer>
 <dialog id="chemicalPicker" aria-labelledby="chemicalPickerTitle"><div class="picker-head"><h3 id="chemicalPickerTitle">選擇藥劑</h3><button type="button" class="close" onclick="closeChemicalPicker()" aria-label="關閉藥劑選擇">×</button></div><div class="picker-scroll"><label for="catalogSearch">搜尋藥劑</label><input id="catalogSearch" type="search" placeholder="中文、英文、化學式或 CAS 號碼">
 <div id="chemicalCategories" class="category-tabs" aria-label="藥劑分類"></div>
 <p class="category-help soft">同一藥劑可有多個標籤；其他選項請點「更多分類」。</p>
 <p id="catalogCount" class="soft" role="status"></p><div id="chemicalCatalog" class="chemical-catalog"></div><div class="catalog-pagination"><button type="button" id="catalogPrev" class="close" aria-label="上一頁藥劑">‹</button><span id="catalogPage"></span><button type="button" id="catalogNext" class="close" aria-label="下一頁藥劑">›</button></div>
 </div><div class="picker-foot"><span id="pickerSelectedCount" role="status">已選 0 項</span><button type="button" class="primary" onclick="closeChemicalPicker(true)">完成選擇，填寫用量</button></div></dialog>
-<div id="detailsModal" class="modalback hidden" role="dialog" aria-modal="true" onclick="if(event.target===this)closeDetailsModal()"><div class="modal"><div class="modalhead"><h3>預約詳細資訊</h3><button class="close" onclick="closeDetailsModal()" aria-label="關閉">×</button></div><dl class="details"><div class="detail"><dt>實驗室</dt><dd id="modalLab"></dd></div><div class="detail"><dt>姓名</dt><dd id="modalUser"></dd></div><div class="detail"><dt>開始時間</dt><dd id="modalStart"></dd></div><div class="detail"><dt>結束時間</dt><dd id="modalEnd"></dd></div><div class="detail"><dt>使用用途</dt><dd id="modalPurpose"></dd></div><div class="detail"><dt>使用儀器</dt><dd id="modalDevice"></dd></div><div class="detail"><dt>備註</dt><dd id="modalNote"></dd></div></dl><div id="detailsActions" class="details-actions"><button id="modalCancelBtn" type="button" class="cancel">取消預約</button></div><form id="cancelBookingForm" hidden><h4>取消此筆預約</h4><p>請輸入預約時登記的學號。</p><label for="cancelStudentId">學號 <span class="req">*</span></label><input id="cancelStudentId" required autocomplete="off" placeholder="輸入登記學號"><p class="soft">取消後將釋出此預約時段。</p><p id="cancelBookingError" role="alert"></p><div class="cancel-confirm-actions"><button type="button" id="cancelBackBtn" onclick="resetCancelPanel()">返回</button><button type="submit" id="cancelConfirmBtn">確認取消</button></div></form></div></div>
+<div id="detailsModal" class="modalback hidden" role="dialog" aria-modal="true" onclick="if(event.target===this)closeDetailsModal()"><div class="modal"><div class="modalhead"><h3 id="detailsTitle">預約詳細資訊</h3><button class="close" onclick="closeDetailsModal()" aria-label="關閉">×</button></div><div id="bookingDetailSummary"><div class="detail-identity"><span id="modalLab"></span><span id="modalUser"></span></div><div id="modalWhen" class="detail-when"></div></div><dl id="bookingDetailFields" class="details"><div class="detail"><dt>使用用途</dt><dd id="modalPurpose"></dd></div><div class="detail"><dt>使用儀器</dt><dd id="modalDevice"></dd></div><div class="detail"><dt>備註</dt><dd id="modalNote"></dd></div></dl><div id="detailsActions" class="details-actions"><button id="modalCancelBtn" type="button" class="cancel">取消預約</button></div><form id="cancelBookingForm" hidden><label for="cancelStudentId">學號 <span class="req">*</span></label><input id="cancelStudentId" required autocomplete="off" placeholder="請輸入預約時登記的學號"><p class="soft">取消後將釋出此預約時段。</p><p id="cancelBookingError" role="alert"></p><div class="cancel-confirm-actions"><button type="button" id="cancelBackBtn" onclick="resetCancelPanel()">返回</button><button type="submit" id="cancelConfirmBtn">確認取消</button></div></form></div></div>
 <script>
 var API_URL="https://script.google.com/macros/s/AKfycbz0QZdXpeOgmNPyPCuq8iG_eZueiApAonOlNeQgKdtOr7YM1FwObsADBxOrw3F0aNVSSQ/exec";let calendar,globalChemData=[];
 const LAB_COLORS=Object.freeze({RE126:"#527AA3",RE132:"#E69F00","RE220-1":"#7C3AED",RE306:"#00873E",RE308:"#DC2626",AR303:"#52525B",RE130:"#64748b"});
@@ -353,7 +371,7 @@ function initCalendar(){
   document.body.classList.add("booking-details-open");
   const p=info.event.extendedProps,f=d=>d?d.toLocaleString("zh-TW",{hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
   document.getElementById("modalLab").innerHTML=historyLabTag(p.lab||info.event.title.split(" - ")[0]);resetCancelPanel();setText("modalUser",p.user);
-  setText("modalStart",f(info.event.start));setText("modalEnd",f(info.event.end));
+  renderDetailWhen(info.event.start,info.event.end);
   setText("modalPurpose",p.purpose||"無");setText("modalDevice",p.device||"無");setText("modalNote",p.note||"無");
   const btn=document.getElementById("modalCancelBtn");
   btn.disabled=!p.canCancel;btn.textContent=p.canCancel?"取消預約":"請聯繫管理員取消";
@@ -378,12 +396,22 @@ async function retryCalendar(){
  finally{btn.disabled=false;}
 }
 function setText(id,value){document.getElementById(id).textContent=value||""}function closeDetailsModal(){if(cancelBookingBusy)return;resetCancelPanel();document.body.classList.remove("booking-details-open");const m=document.getElementById("detailsModal");m.classList.remove("flex");m.classList.add("hidden")}
+function renderDetailWhen(start,end){
+ const root=document.getElementById('modalWhen');root.replaceChildren();
+ const date=d=>d.toLocaleDateString('en-CA',{year:'numeric',month:'2-digit',day:'2-digit'}).replaceAll('-','/');
+ const time=d=>d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
+ const row=(d,t)=>{const line=document.createElement('div');line.className='detail-date-row';const a=document.createElement('span'),b=document.createElement('span');a.textContent=d;b.textContent=t;line.append(a,b);root.append(line);};
+ if(start&&end&&date(start)===date(end))row(date(start),time(start)+'–'+time(end));
+ else{if(start)row(date(start),time(start)+' 起');if(end)row(date(end),time(end)+' 止');}
+}
 let cancelBookingBusy=false,cancelTargetId=null;
 function resetCancelPanel(){
  if(cancelBookingBusy)return;
+ setText('detailsTitle','預約詳細資訊');document.getElementById('bookingDetailFields').hidden=false;document.getElementById('detailsModal').classList.remove('cancelling');
  cancelTargetId=null;document.getElementById('cancelBookingForm').hidden=true;document.getElementById('cancelStudentId').value='';setText('cancelBookingError','');document.getElementById('detailsActions').hidden=false;
 }
 function openCancelPanel(bookingId){
+ setText('detailsTitle','取消此筆預約');document.getElementById('bookingDetailFields').hidden=true;document.getElementById('detailsModal').classList.add('cancelling');
  cancelTargetId=bookingId;document.getElementById('detailsActions').hidden=true;document.getElementById('cancelBookingForm').hidden=false;setText('cancelBookingError','');document.getElementById('cancelStudentId').focus();
 }
 document.getElementById('cancelBookingForm').addEventListener('submit',async function(e){
