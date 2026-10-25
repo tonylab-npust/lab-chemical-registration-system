@@ -136,6 +136,7 @@ body.booking-details-open{overflow:hidden}
 .unified-logo{background:#0d3b2e;border:1px solid #ffffff60;border-radius:11px;flex-shrink:0}.date-open{background:white}.picker-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.picker-title h3{margin:0!important}.picker-title button{background:none;border:0;color:#7b8882;font-size:28px;cursor:pointer;padding:0 6px}
 #datePicker{width:min(420px,calc(100vw - 24px));max-height:88dvh;overflow:auto;border:0;border-radius:26px;padding:24px;color:#173f32;box-shadow:0 18px 60px #0003}#datePicker::backdrop{background:#102d2466}.date-preview{background:#edf4eb;border-radius:18px;padding:18px 8px;text-align:center;margin-bottom:18px}.date-preview strong{display:block;font-size:25px}.date-preview small{display:block;font-size:14px;color:#69756f;margin-top:5px}.date-month{display:flex;align-items:center;justify-content:space-between;margin:12px 0}.date-month button{background:transparent;border:0;color:#174936;font-size:25px;cursor:pointer;width:40px;height:40px}.date-weekdays,.date-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}.date-weekdays{color:#69756f;font-size:13px;padding:8px 0}.date-days button{aspect-ratio:1;border:0;background:white;border-radius:50%;color:#173f32;cursor:pointer;padding:0;font-size:16px}.date-days button.is-today{box-shadow:inset 0 0 0 1px #88ae95}.date-days button[aria-pressed=true]{background:#155a45;color:white;box-shadow:none}.date-days{margin-bottom:24px}.date-actions .today{margin-right:auto;background:transparent;color:#155a45;padding-left:0}.time-preview{background:#edf4eb}.time-actions button{background:#eef4ee;color:#173f32}.time-options button:focus-visible,.date-days button:focus-visible{outline:2px solid #527aa3;outline-offset:2px}
 @media(max-width:420px){#datePicker{padding:20px}.date-preview strong{font-size:23px}}
+#bookingSuccess{width:min(460px,calc(100vw - 24px));max-height:88dvh;overflow:auto;border:0;border-radius:26px;padding:28px;color:var(--ink);background:white;box-shadow:0 18px 60px #0003}#bookingSuccess::backdrop{background:#102d2466}.success-close{position:absolute;right:16px;top:12px;border:0;background:transparent;color:#78847d;font-size:28px;cursor:pointer}.success-heading{text-align:center;padding:5px 0 20px}.success-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 12px;border-radius:50%;background:#edf4eb;color:#155a45;font-size:32px}.success-heading h3{margin:0;font-size:27px;color:var(--green)}.success-details{display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px 16px;margin:0;padding:20px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:15px}.success-details dt{color:var(--muted)}.success-details dd{margin:0;overflow-wrap:anywhere}.success-note{font-size:14px;line-height:1.7;margin:18px 0}.success-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.success-actions button{min-width:0;min-height:46px;padding:12px 6px;border-radius:16px;font-weight:700;font-size:14px;white-space:nowrap;cursor:pointer;background:white;color:var(--green);border:1px solid #cbdcd2}.success-actions .success-main{background:var(--green);color:white;border-color:var(--green)}.success-cancel-note{font-size:12px;color:var(--muted);margin:14px 0 0}.calendarPanel,#bookingForm{scroll-margin-top:100px}@media(max-width:420px){#bookingSuccess{padding:24px 20px}.success-details{gap:10px;font-size:14px;grid-template-columns:72px minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -176,7 +177,7 @@ body.booking-details-open{overflow:hidden}
 <div class="contact">負責老師：吳東霖教授　｜　管理研究生：李芷玲（0970-021-689）、邱玟綺（0903-098-207）</div></div></details>
 <div class="entry-actions"><button type="button" id="acknowledgeBtn" class="primary ack" aria-controls="entryChoices" aria-expanded="false">我已了解</button><div id="entryChoices" class="choices" hidden><a class="choice" href="#reservation"><p class="kicker">Lab Reservation</p><b>預約使用登記 →</b><span>預約實驗室、填寫使用儀器與查看月曆</span></a><a class="choice" href="#chemicals"><p class="kicker">Chemical Management</p><b>藥劑消耗登記 →</b><span>登記藥劑用量與查詢即時庫存</span></a></div></div></div>
 <div id="backRow" class="backrow" hidden><a class="backlink" href="#home">← 返回首頁</a></div>
-<section id="reservation" class="card" hidden tabindex="-1"><div class="head"><p class="kicker">Lab Reservation</p><h2>實驗室預約使用登記</h2><p class="desc">填寫預約資料，並由右側月曆確認現有時段。</p></div><div id="bookingReceipt" class="receipt" role="status" hidden></div><div class="booking">
+<section id="reservation" class="card" hidden tabindex="-1"><div class="head"><p class="kicker">Lab Reservation</p><h2>實驗室預約使用登記</h2><p class="desc">填寫預約資料，並由右側月曆確認現有時段。</p></div><div class="booking">
 <form id="bookingForm" class="panel"><div class="grid">
 <div><label for="bookingId">學號 <span class="req">*</span></label><input id="bookingId" required placeholder="如：B10919024"></div><div><label for="bookingName">姓名 <span class="req">*</span></label><input id="bookingName" required placeholder="如：李芷玲"></div>
 <div class="full"><label id="bookingLabLabel">預使用的實驗室 <span class="req">*</span></label><input id="lab" type="hidden"><div class="chemical-lab-options" role="group" aria-labelledby="bookingLabLabel"><label class="chemical-lab-choice" style="--lab-ink:#527AA3"><input type="radio" name="bookingLabChoice" value="RE126" required><span>RE126</span></label><label class="chemical-lab-choice" style="--lab-ink:#805800"><input type="radio" name="bookingLabChoice" value="RE132" required><span>RE132</span></label><label class="chemical-lab-choice" style="--lab-ink:#7C3AED"><input type="radio" name="bookingLabChoice" value="RE220-1" required><span>RE220-1</span></label><label class="chemical-lab-choice" style="--lab-ink:#00873E"><input type="radio" name="bookingLabChoice" value="RE306" required><span>RE306</span></label><label class="chemical-lab-choice" style="--lab-ink:#DC2626"><input type="radio" name="bookingLabChoice" value="RE308" required><span>RE308</span></label><label class="chemical-lab-choice" style="--lab-ink:#52525B"><input type="radio" name="bookingLabChoice" value="AR303" required><span>AR303</span></label></div></div>
@@ -196,7 +197,7 @@ body.booking-details-open{overflow:hidden}
 <div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th scope="col">藥劑資料</th><th scope="col" class="inventory-category-cell">分類</th><th scope="col" class="num">目前庫存</th><th scope="col">庫存狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="4">正在載入庫存…</td></tr></tbody></table></div>
 <div class="inventory-pagination"><button id="inventoryPrev" class="close" type="button" aria-label="上一頁庫存">‹</button><span id="inventoryPage" role="status">1 / 1 頁</span><button id="inventoryNext" class="close" type="button" aria-label="下一頁庫存">›</button></div><div class="tablenote">每頁 10 項 · 空白庫存與已用完分開標示</div></div></details></div></section>
 </main>
-<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r37</small></div></div></footer>
+<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r38</small></div></div></footer>
 <dialog id="chemicalPicker" aria-labelledby="chemicalPickerTitle"><div class="picker-head"><h3 id="chemicalPickerTitle">選擇藥劑</h3><button type="button" class="close" onclick="closeChemicalPicker()" aria-label="關閉藥劑選擇">×</button></div><div class="picker-scroll"><label for="catalogSearch">搜尋藥劑</label><input id="catalogSearch" type="search" placeholder="中文、英文、化學式或 CAS 號碼">
 <div id="chemicalCategories" class="category-tabs" aria-label="藥劑分類"></div>
 <p class="category-help soft">同一藥劑可有多個標籤；其他選項請點「更多分類」。</p>
@@ -524,10 +525,19 @@ document.querySelectorAll('[name="bookingLabChoice"]').forEach(r=>r.addEventList
 document.querySelectorAll('[name="chemicalLabChoice"]').forEach(r=>r.addEventListener("change",()=>{document.getElementById("chemLab").value=r.value}));
 document.getElementById("catalogSearch").addEventListener("input",()=>{catalogPage=0;renderChemicalCatalog()});
 
-function showBookingReceipt(r){
- const receipt=document.getElementById("bookingReceipt");
- receipt.innerHTML='<h3>預約已完成</h3><p>進入實驗室後請於群組報到；使用藥劑後請另行登記。</p><p>如需取消，請點選月曆中的預約，輸入登記學號即可。</p>';
- receipt.hidden=false;receipt.scrollIntoView({behavior:"smooth",block:"center"});
+let completedBooking=null;
+function showBookingReceipt(data){
+ completedBooking={lab:data.lab,name:data.name,start:data.start,end:data.end,device:data.device};
+ const when=v=>String(v||'').replace('T',' ').replaceAll('-','/');
+ document.getElementById('bookingSuccessDetails').innerHTML='<dt>實驗室</dt><dd>'+historyLabTag(data.lab)+'</dd><dt>姓名</dt><dd>'+esc(data.name)+'</dd><dt>開始時間</dt><dd>'+esc(when(data.start))+'</dd><dt>結束時間</dt><dd>'+esc(when(data.end))+'</dd><dt>使用儀器</dt><dd>'+esc(data.device)+'</dd>';
+ document.getElementById('bookingSuccess').showModal();
+}
+function finishBookingSuccess(view){
+ document.getElementById('bookingSuccess').close();
+ if(view==='calendar'){
+  if(calendar&&completedBooking){calendar.gotoDate(completedBooking.start.slice(0,10));calendar.updateSize();}
+  const panel=document.querySelector('.calendarPanel');panel.setAttribute('tabindex','-1');panel.focus({preventScroll:true});panel.scrollIntoView({behavior:'smooth',block:'start'});
+ }else{document.getElementById('bookingId').focus({preventScroll:true});document.getElementById('bookingForm').scrollIntoView({behavior:'smooth',block:'start'});}
 }
 document.getElementById("bookingForm").addEventListener("submit",async function(e){
  e.preventDefault();const b=document.getElementById("bookBtn");if(b.disabled)return;
@@ -540,10 +550,11 @@ document.getElementById("bookingForm").addEventListener("submit",async function(
  b.disabled=true;b.textContent="正在送出…";let sending=false;
  try{
   await requireBackend();sending=true;
-  const r=await post({action:"addLabBooking",data:{studentId:v("bookingId"),name:v("bookingName"),lab:v("lab"),start:v("start"),end:v("end"),device:devices.join("、"),purpose:v("bookingPurpose"),note:v("bookingNote")}});
+  const submitted={studentId:v("bookingId"),name:v("bookingName"),lab:v("lab"),start:v("start"),end:v("end"),device:devices.join("、"),purpose:v("bookingPurpose"),note:v("bookingNote")};
+  const r=await post({action:"addLabBooking",data:submitted});
   if(r.status!=="success"){alert(r.message);return}
   this.reset();document.getElementById("start").value="";document.getElementById("end").value="";
-  setText("deviceRowsContainer","");addDeviceRow();refreshBookings();showBookingReceipt(r);
+  setText("deviceRowsContainer","");addDeviceRow();refreshBookings();showBookingReceipt(submitted);
  }catch(err){alert(sending?"尚未確認預約結果，請先重新載入月曆或聯繫管理員確認，避免重複預約。":err.message);}
  finally{b.disabled=false;b.textContent="送出預約申請";}
 });
@@ -623,4 +634,4 @@ function movePickerMonth(delta){const d=new Date(pickerYear,pickerMonth+delta,1)
 function pickToday(){draftDate=taipeiToday();const [y,m]=dateParts(draftDate);pickerYear=y;pickerMonth=m-1;renderDatePicker();}
 function confirmDatePicker(){const input=document.getElementById(editingDate+'Date');input.value=draftDate;input.dispatchEvent(new Event('change',{bubbles:true}));refreshDateButtons();syncBookingTimes();document.getElementById('datePicker').close();}
 document.getElementById('bookingForm').addEventListener('reset',()=>{['start','end'].forEach(k=>document.getElementById(k+'Date').value='');refreshDateButtons();});
-</script></body></html>
+</script><dialog id="bookingSuccess" aria-labelledby="bookingSuccessTitle" aria-describedby="bookingSuccessNote"><button type="button" class="success-close" aria-label="關閉預約成功通知" onclick="document.getElementById('bookingSuccess').close()">×</button><div class="success-heading"><span class="success-icon" aria-hidden="true">✓</span><h3 id="bookingSuccessTitle">預約成功</h3></div><dl id="bookingSuccessDetails" class="success-details"></dl><p id="bookingSuccessNote" class="success-note">進入實驗室時請於群組報到；使用藥劑後請另行登記。</p><div class="success-actions"><button type="button" class="success-main" onclick="finishBookingSuccess('calendar')">查看月曆</button><button type="button" onclick="finishBookingSuccess('form')">繼續預約</button></div><p class="success-cancel-note">如需取消，請點選月曆中的預約，輸入登記學號。</p></dialog></body></html>
