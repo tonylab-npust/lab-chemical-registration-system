@@ -162,6 +162,22 @@ body.booking-details-open{overflow:hidden}
 #chemicalHistory table{min-width:640px}#chemicalHistory td:nth-child(1),#chemicalHistory td:nth-child(2),#chemicalHistory td:nth-child(3),#chemicalHistory td:nth-child(5){white-space:nowrap}#chemicalHistory td:nth-child(4){min-width:200px;overflow-wrap:anywhere}#chemicalLoadError{padding:12px;border:1px solid #e5bbb7;border-radius:12px;color:var(--red);margin-bottom:12px}
 #chemicalSuccess{width:min(460px,calc(100vw - 24px));max-height:88dvh;border:0;border-radius:26px;padding:28px;color:var(--ink);background:white;box-shadow:0 18px 60px #0003;overflow:hidden}#chemicalSuccess[open]{display:flex;flex-direction:column}#chemicalSuccess::backdrop{background:#102d2466}#chemicalSuccess .success-heading{flex-shrink:0;padding-bottom:14px}#chemicalSuccess .success-heading p{margin:6px 0 0;color:var(--muted)}#chemicalSuccessIdentity{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#f4f7f4;border-radius:12px;padding:12px 14px;flex-shrink:0}#chemicalSuccessItems{min-height:0;overflow:auto;margin:12px 0 20px;overscroll-behavior:contain}.chemical-receipt-row{display:flex;justify-content:space-between;gap:18px;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px}.chemical-receipt-row span{min-width:0;overflow-wrap:anywhere}.chemical-receipt-row strong{white-space:nowrap}#chemicalSuccess .success-actions{flex-shrink:0}#chemicalHistory,#chemForm{scroll-margin-top:100px}
 @media(max-width:650px){.chemical-lab-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.chemical-lab-choice{min-width:0}.chemical-lab-choice span{text-align:center;padding:10px 3px;font-size:14px;white-space:nowrap}.chemform{padding:17px}.chemwrap>.history{margin:20px 17px}.inventory-summary{font-size:14px;gap:8px}.inventory-summary .add{font-size:12px;padding:8px}.chemwrap>.history{padding:14px}#chemicalSuccess{padding:24px 20px}#chemicalSuccess .success-heading h3{font-size:24px}}
+/* r42 reversible chemical selection */
+.chemical-add[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:white;opacity:1;cursor:pointer}.chemical-add:focus-visible{outline:3px solid #aac8ba;outline-offset:3px}
+/* r43 weekly rows: equal time / lab / person-purpose columns */
+#calendar .fc-list-event{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);width:100%;align-items:stretch}
+#calendar .fc-list-event td{padding:14px 0;min-width:0}
+#calendar .fc-list-event .fc-list-event-graphic{display:none}
+#calendar .fc-list-event .fc-list-event-time{display:flex;align-items:center;justify-content:center;width:auto;text-align:center;white-space:normal;font-size:13px;padding:14px 4px;font-variant-numeric:tabular-nums}
+#calendar .fc-list-event .fc-list-event-title{display:flex;align-items:center}
+#calendar .fc-list-event .fc-list-event-title>a{display:block;width:100%;min-width:0}
+#calendar .fc-list-event .booking-label-content{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;width:100%;align-items:center}
+#calendar .fc-list-event .booking-lab-tag{justify-self:center;max-width:100%;font-size:13px;padding:2px 5px;white-space:nowrap}
+#calendar .fc-list-event .booking-label-user{min-width:0;padding:0 7px;font-size:14px;line-height:1.6;text-align:left;overflow-wrap:anywhere}
+#calendar .fc-list-day-cushion{display:flex;width:100%;justify-content:space-between;align-items:center;padding:22px 8px 10px;gap:12px}
+#calendar .fc-list-day-cushion::before,#calendar .fc-list-day-cushion::after{display:none!important}
+#calendar .fc-list-day-text{margin:0;text-align:left}#calendar .fc-list-day-side-text{margin:0 0 0 auto;text-align:right;white-space:nowrap}
+@media(max-width:640px){#calendar .fc-list-event .fc-list-event-time{font-size:11px}#calendar .fc-list-event .booking-lab-tag{font-size:11px;padding:2px 3px}#calendar .fc-list-event .booking-label-user{font-size:12px;padding:0 4px}}
 </style>
 </head>
 <body>
@@ -222,7 +238,7 @@ body.booking-details-open{overflow:hidden}
 <div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th scope="col">藥劑資料</th><th scope="col" class="inventory-category-cell">分類</th><th scope="col" class="num">目前庫存</th><th scope="col">庫存狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="4">正在載入庫存…</td></tr></tbody></table></div>
 <div class="inventory-pagination"><button id="inventoryPrev" class="close" type="button" aria-label="上一頁庫存">‹</button><span id="inventoryPage" role="status">1 / 1 頁</span><button id="inventoryNext" class="close" type="button" aria-label="下一頁庫存">›</button></div><div class="tablenote">每頁 10 項 · 空白庫存與已用完分開標示</div></div></details></div></section>
 </main>
-<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r41</small></div></div></footer>
+<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.25-r43</small></div></div></footer>
 <dialog id="chemicalPicker" aria-labelledby="chemicalPickerTitle"><div class="picker-head"><h3 id="chemicalPickerTitle">選擇藥劑</h3><button type="button" class="close" onclick="closeChemicalPicker()" aria-label="關閉藥劑選擇">×</button></div><div class="picker-scroll"><label for="catalogSearch">搜尋藥劑</label><input id="catalogSearch" type="search" placeholder="中文、英文、化學式或 CAS 號碼">
 <div id="chemicalCategories" class="category-tabs" aria-label="藥劑分類"></div>
 <p class="category-help soft">同一藥劑可有多個標籤；其他選項請點「更多分類」。</p>
@@ -344,7 +360,7 @@ function initCalendar(){
   badge.append(full,short);wrap.append(badge);
   if(!list&&bookingSpansDays(info.event)){const range=document.createElement("span");range.className="booking-span-range";range.textContent=bookingRangeLabel(info.event);wrap.append(range);}
   else if(!list&&info.timeText){const time=document.createElement("span");time.className="booking-label-time";time.textContent=info.timeText;wrap.append(time);}
-  if(list){const user=document.createElement("span");user.className="booking-label-user";user.textContent=p.user||"未填寫";if(p.purpose&&p.purpose!=="無"){const purpose=document.createElement("span");purpose.className="booking-label-purpose";purpose.textContent=" · "+p.purpose;user.append(purpose);}wrap.append(user);}
+  if(list){const user=document.createElement("span");user.className="booking-label-user";user.textContent=p.user||"未填寫";if(p.purpose&&p.purpose!=="無"){const purpose=document.createElement("span");purpose.className="booking-label-purpose";purpose.textContent=" • "+p.purpose;user.append(purpose);}wrap.append(user);}
   return {domNodes:[wrap]};
  },
  eventTimeFormat:{hour:"2-digit",minute:"2-digit",hour12:false},
@@ -527,14 +543,21 @@ function renderChemicalCatalog(){
  setText("catalogCount",`找到 ${rows.length} 項藥劑`);
  catalogPage=Math.min(catalogPage,Math.max(0,Math.ceil(rows.length/6)-1));
  const selected=new Set([...document.querySelectorAll(".chem-row")].map(r=>r.dataset.name));
- document.getElementById("chemicalCatalog").innerHTML=rows.slice(catalogPage*6,catalogPage*6+6).map(c=>`<article class="chemical-card"><div class="formula-tile" title="${esc(c.formula||'未提供')}"><span style="font-size:${Math.max(10,Math.min(18,100/Math.max(1,Array.from(String(c.formula||'—')).length)))}px">${esc(c.formula||"—")}</span></div><div class="chemical-card-info"><strong>${esc(c.name)}</strong><span class="soft">${esc(c.english||"—")}</span><span class="chemical-cas">CAS ${esc(c.cas||"未提供")}</span><span class="soft">${esc(c.spec||"")}</span><div class="chemical-tags">${(allChemTags(c).length?allChemTags(c):["未分類"]).map(t=>`<span>${esc(t)}</span>`).join("")}</div><small>單位：${esc(c.unit||"未設定")} · ${needsPurpose(c)?'用途必填 <span class="req">*</span>':'用途選填'}</small></div><button type="button" class="chemical-add" data-name="${esc(c.name)}" aria-label="加入${esc(c.name)}" ${selected.has(c.name)?"disabled":""}>${selected.has(c.name)?"✓":"＋"}</button></article>`).join("")||'<p class="soft">沒有符合條件的藥劑，請更換分類或關鍵字。</p>';
- document.querySelectorAll(".chemical-add").forEach(b=>b.onclick=()=>addChemRow(b.dataset.name));
+ document.getElementById("chemicalCatalog").innerHTML=rows.slice(catalogPage*6,catalogPage*6+6).map(c=>`<article class="chemical-card"><div class="formula-tile" title="${esc(c.formula||'未提供')}"><span style="font-size:${Math.max(10,Math.min(18,100/Math.max(1,Array.from(String(c.formula||'—')).length)))}px">${esc(c.formula||"—")}</span></div><div class="chemical-card-info"><strong>${esc(c.name)}</strong><span class="soft">${esc(c.english||"—")}</span><span class="chemical-cas">CAS ${esc(c.cas||"未提供")}</span><span class="soft">${esc(c.spec||"")}</span><div class="chemical-tags">${(allChemTags(c).length?allChemTags(c):["未分類"]).map(t=>`<span>${esc(t)}</span>`).join("")}</div><small>單位：${esc(c.unit||"未設定")} · ${needsPurpose(c)?'用途必填 <span class="req">*</span>':'用途選填'}</small></div><button type="button" class="chemical-add" data-name="${esc(c.name)}" aria-label="${selected.has(c.name)?'取消選取':'加入'}${esc(c.name)}" aria-pressed="${selected.has(c.name)}" title="${selected.has(c.name)?'再次點選可取消':'加入藥劑'}">${selected.has(c.name)?"✓":"＋"}</button></article>`).join("")||'<p class="soft">沒有符合條件的藥劑，請更換分類或關鍵字。</p>';
+ document.querySelectorAll(".chemical-add").forEach(b=>b.onclick=()=>toggleChemicalSelection(b.dataset.name));
  const pages=Math.max(1,Math.ceil(rows.length/6));
  setText("catalogPage",`${catalogPage+1} / ${pages} 頁`);
  document.getElementById("catalogPrev").disabled=catalogPage===0;
  document.getElementById("catalogNext").disabled=catalogPage>=pages-1;
  setText("pickerSelectedCount",`已選 ${selected.size} 項`);
  document.getElementById("selectedEmpty").hidden=selected.size>0;
+}
+function toggleChemicalSelection(name){
+ const scroller=document.querySelector('#chemicalPicker .picker-scroll'),scrollTop=scroller.scrollTop;
+ const row=[...document.querySelectorAll('#chemRowsContainer .chem-row')].find(r=>r.dataset.name===name);
+ if(row){row.remove();renderChemicalCatalog();}else addChemRow(name);
+ const button=[...document.querySelectorAll('#chemicalCatalog .chemical-add')].find(b=>b.dataset.name===name);
+ if(button)button.focus({preventScroll:true});scroller.scrollTop=scrollTop;
 }
 function refreshSelectedRules(){
  document.querySelectorAll(".chem-row").forEach(row=>{
