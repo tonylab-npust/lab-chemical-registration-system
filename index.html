@@ -199,21 +199,17 @@ body.booking-details-open{overflow:hidden}
 #chemicalHistory[open]>summary::before,#inventoryDisclosure[open]>summary::before{transform:rotate(45deg)}
 #inventoryDisclosure>summary .add{margin-left:auto}
 
-/* r48: daily overflow panel matches the booking detail dialog. */
-.fc .fc-popover{position:fixed!important;inset:50% auto auto 50%!important;transform:translate(-50%,-50%);width:min(360px,calc(100vw - 28px));max-width:calc(100vw - 28px);max-height:74dvh;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line)!important;border-radius:20px;box-shadow:0 16px 52px #102d2433;overflow:hidden;font-family:inherit}
-.fc .fc-popover-header{flex:0 0 auto;display:flex;align-items:center;gap:12px;background:#fff!important;color:var(--green);padding:16px 18px;border-bottom:1px solid var(--line)}
-.fc .fc-popover-title{margin:0;font-size:17px;font-weight:700;line-height:1.5}
-.fc .fc-popover-close{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;margin-left:auto;border-radius:11px;background:#eef3f0;color:#52615a;font-size:22px;opacity:1}
-.fc .fc-popover-close:hover{background:#e1eae4;color:var(--green)}
-.fc .fc-popover .fc-popover-body{min-width:0!important;min-height:0;overflow:auto;overscroll-behavior:contain;padding:10px 14px 14px}
-.fc .fc-popover .fc-daygrid-event{margin:0!important;padding:11px 6px!important;border-radius:0!important;border-bottom:1px solid #e8ede9!important;white-space:normal}
-.fc .fc-popover .fc-daygrid-event:last-child{border-bottom:0!important}
-.fc .fc-popover .fc-daygrid-event:hover{background:#f5f8f5!important}
-.fc .fc-popover .booking-lab-tag{font-size:12px!important;padding:2px 6px!important;border-radius:6px}
-.fc .fc-popover .booking-label-content{gap:8px;max-width:100%}
-.fc .fc-popover .booking-label-time{font-size:12px;line-height:1.5;white-space:normal;overflow-wrap:break-word}
-.fc .fc-popover .lab-full{display:inline!important}.fc .fc-popover .lab-short{display:none!important}
-@media(max-width:640px){.fc .fc-popover{max-height:70dvh}.fc .fc-popover-header{padding:14px 16px}.fc .fc-popover-title{font-size:16px}}
+/* r49: native daily-booking dialog, outside the calendar stacking context. */
+#dailyBookings{width:min(400px,calc(100vw - 28px));max-height:76dvh;border:1px solid var(--line);border-radius:20px;padding:0;background:#fff;color:var(--ink);box-shadow:0 16px 52px #102d2433}
+#dailyBookings[open]{display:flex;flex-direction:column}#dailyBookings::backdrop{background:#102d2466;backdrop-filter:blur(3px)}
+.daily-heading{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);flex-shrink:0}
+.daily-heading h3{margin:0;color:var(--green);font-size:17px;line-height:1.5}.daily-close{margin-left:auto;flex:0 0 44px;width:44px;height:44px;border:0;border-radius:11px;background:#eef3f0;color:#52615a;font-size:24px;cursor:pointer}
+#dailyBookingItems{overflow:auto;overscroll-behavior:contain;min-height:0;padding:8px 16px 14px}
+.daily-booking-row{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:12px 2px;background:white;border:0;border-bottom:1px solid #e8ede9;text-align:left;color:var(--ink);cursor:pointer}
+.daily-booking-row:last-child{border-bottom:0}.daily-booking-row:hover{background:#f5f8f5}.daily-booking-row:focus-visible,.daily-close:focus-visible{outline:2px solid var(--green2);outline-offset:-2px}
+.daily-booking-row .booking-lab-tag{font-size:12px;padding:2px 6px;flex-shrink:0;border-radius:6px}.daily-booking-time{font-size:13px;color:#52615a;line-height:1.6;overflow-wrap:break-word}
+body.daily-bookings-open{overflow:hidden}
+@media(max-width:640px){#dailyBookings{max-height:72dvh}.daily-heading{padding:14px 16px}.daily-heading h3{font-size:16px}}
 </style>
 </head>
 <body>
@@ -274,13 +270,14 @@ body.booking-details-open{overflow:hidden}
 <div class="inventory-table-wrap"><table class="inventory-table"><thead><tr><th scope="col">藥劑資料</th><th scope="col" class="inventory-category-cell">分類</th><th scope="col" class="num">目前庫存</th><th scope="col">庫存狀態</th></tr></thead><tbody id="chemTableBody"><tr class="empty"><td colspan="4">正在載入庫存…</td></tr></tbody></table></div>
 <div class="inventory-pagination"><button id="inventoryPrev" class="close" type="button" aria-label="上一頁庫存">‹</button><span id="inventoryPage" role="status">1 / 1 頁</span><button id="inventoryNext" class="close" type="button" aria-label="下一頁庫存">›</button></div><div class="tablenote">每頁 10 項 · 空白庫存與已用完分開標示</div></div></details></div></section>
 </main>
-<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.29-r48</small></div></div></footer>
+<footer><div class="shell foot"><div><b>國立屏東科技大學｜木材科學與設計系</b><br>吳東霖教授 綠色材料與高分子利用研究室</div><div>系統使用問題請洽管理研究生<br>© 2026 TONY LAB<br><small>介面版本：2026.10.29-r49</small></div></div></footer>
 <dialog id="chemicalPicker" aria-labelledby="chemicalPickerTitle"><div class="picker-head"><h3 id="chemicalPickerTitle">選擇藥劑</h3><button type="button" class="close" onclick="closeChemicalPicker()" aria-label="關閉藥劑選擇">×</button></div><div class="picker-scroll"><label for="catalogSearch">搜尋藥劑</label><input id="catalogSearch" type="search" placeholder="中文、英文、化學式或 CAS 號碼">
 <div id="chemicalCategories" class="category-tabs" aria-label="藥劑分類"></div>
 <p class="category-help soft">同一藥劑可有多個標籤；其他選項請點「更多分類」。</p>
 <p id="catalogCount" class="soft" role="status"></p><div id="chemicalCatalog" class="chemical-catalog"></div><div class="catalog-pagination"><button type="button" id="catalogPrev" class="close" aria-label="上一頁藥劑">‹</button><span id="catalogPage"></span><button type="button" id="catalogNext" class="close" aria-label="下一頁藥劑">›</button></div>
 </div><div class="picker-foot"><span id="pickerSelectedCount" role="status">已選 0 項</span><button type="button" class="primary" onclick="closeChemicalPicker(true)">完成選擇，填寫用量</button></div></dialog>
 <div id="detailsModal" class="modalback hidden" role="dialog" aria-modal="true" onclick="if(event.target===this)closeDetailsModal()"><div class="modal"><div class="modalhead"><h3 id="detailsTitle">預約詳細資訊</h3><button class="close" onclick="closeDetailsModal()" aria-label="關閉">×</button></div><div id="bookingDetailSummary"><div class="detail-identity"><span id="modalLab"></span><span id="modalUser"></span></div><div id="modalWhen" class="detail-when"></div></div><dl id="bookingDetailFields" class="details"><div class="detail"><dt>使用用途</dt><dd id="modalPurpose"></dd></div><div class="detail"><dt>使用儀器</dt><dd id="modalDevice"></dd></div><div class="detail"><dt>備註</dt><dd id="modalNote"></dd></div></dl><div id="detailsActions" class="details-actions"><button id="modalCancelBtn" type="button" class="cancel">取消預約</button></div><form id="cancelBookingForm" hidden><label for="cancelStudentId">學號 <span class="req">*</span></label><input id="cancelStudentId" required autocomplete="off" placeholder="請輸入預約時登記的學號"><p class="soft">取消後將釋出此預約時段。</p><p id="cancelBookingError" role="alert"></p><div class="cancel-confirm-actions"><button type="button" id="cancelBackBtn" onclick="resetCancelPanel()">返回</button><button type="submit" id="cancelConfirmBtn">確認取消</button></div></form></div></div>
+<dialog id="dailyBookings" aria-labelledby="dailyBookingTitle"><div class="daily-heading"><h3 id="dailyBookingTitle">當日預約</h3><button type="button" id="dailyBookingClose" class="daily-close" aria-label="關閉當日預約">×</button></div><div id="dailyBookingItems"></div></dialog>
 <script>
 var API_URL="https://script.google.com/macros/s/AKfycbz0QZdXpeOgmNPyPCuq8iG_eZueiApAonOlNeQgKdtOr7YM1FwObsADBxOrw3F0aNVSSQ/exec";let calendar,globalChemData=[];
 const LAB_COLORS=Object.freeze({RE126:"#527AA3",RE132:"#E69F00","RE220-1":"#7C3AED",RE306:"#00873E",RE308:"#DC2626",AR303:"#52525B",RE130:"#64748b"});
@@ -365,6 +362,45 @@ function bookingRangeLabel(event){
  const fmt=d=>new Intl.DateTimeFormat("zh-TW",{timeZone:"Asia/Taipei",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).format(d);
  return fmt(event.start)+" → "+fmt(event.end);
 }
+function closeDailyBookings(){
+ const dialog=document.getElementById('dailyBookings');
+ if(dialog.open)dialog.close();
+ document.body.classList.remove('daily-bookings-open');
+}
+function openDailyBookings(info){
+ const dialog=document.getElementById('dailyBookings'),items=document.getElementById('dailyBookingItems');
+ document.getElementById('dailyBookingTitle').textContent=new Intl.DateTimeFormat('zh-TW',{year:'numeric',month:'long',day:'numeric'}).format(info.date);
+ items.replaceChildren();
+ const seen=new Set();
+ const events=info.allSegs.map(seg=>seg.event).filter(event=>{const key=event.extendedProps.bookingId||event.id;if(!key)return true;if(seen.has(key))return false;seen.add(key);return true;}).sort((a,b)=>a.start-b.start);
+ const time=d=>new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(d);
+ events.forEach(event=>{
+  const button=document.createElement('button');button.type='button';button.className='daily-booking-row';
+  const lab=event.extendedProps.lab||event.title.split(' - ')[0];
+  const badge=document.createElement('span');badge.className='booking-lab-tag';badge.textContent=lab;
+  badge.style.setProperty('--tag-color',LAB_COLORS[lab]||'#52525B');badge.style.setProperty('--tag-ink',lab==='RE132'?'#805800':LAB_COLORS[lab]||'#52525B');
+  const label=document.createElement('span');label.className='daily-booking-time';
+  label.textContent=bookingSpansDays(event)?bookingRangeLabel(event):event.allDay?'全天':event.start?time(event.start)+(event.end?'–'+time(event.end):''):'';
+  button.append(badge,label);button.addEventListener('click',()=>openBookingDetails({event}));items.append(button);
+ });
+ if(!events.length)items.textContent='這一天尚無預約';
+ if(!dialog.open)dialog.showModal();
+ document.body.classList.add('daily-bookings-open');items.scrollTop=0;
+ document.getElementById('dailyBookingClose').focus();
+}
+function openBookingDetails(info){
+  closeDailyBookings();
+  document.body.classList.add("booking-details-open");
+  const p=info.event.extendedProps,f=d=>d?d.toLocaleString("zh-TW",{hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
+  document.getElementById("modalLab").innerHTML=historyLabTag(p.lab||info.event.title.split(" - ")[0]);resetCancelPanel();setText("modalUser",p.user);
+  renderDetailWhen(info.event.start,info.event.end);
+  setText("modalPurpose",p.purpose||"無");setText("modalDevice",p.device||"無");setText("modalNote",p.note||"無");
+  const btn=document.getElementById("modalCancelBtn");
+  btn.disabled=!p.canCancel;btn.textContent=p.canCancel?"取消預約":"請聯繫管理員取消";
+  btn.onclick=()=>{if(p.canCancel)openCancelPanel(p.bookingId)};
+  const m=document.getElementById("detailsModal");m.classList.remove("hidden");m.classList.add("flex");
+
+}
 function initCalendar(){
  calendar=new FullCalendar.Calendar(document.getElementById("calendar"),{
  initialView:window.matchMedia("(max-width:640px)").matches?"listWeek":"dayGridMonth",locale:"zh-tw",headerToolbar:{left:"prev,next jumpToday",center:"title",right:"dayGridMonth,listWeek"},
@@ -376,6 +412,7 @@ function initCalendar(){
  datesSet:()=>scrollListToToday(),
  eventsSet:()=>scrollListToToday(),
  moreLinkContent:args=>"＋"+args.num+" 筆",
+ moreLinkClick:info=>{openDailyBookings(info);return true;},
  noEventsContent:"這段期間尚無預約",
  eventDidMount:info=>{if(info.view.type.indexOf("list")===0){info.el.style.setProperty("--lab-bg",info.event.backgroundColor);info.el.style.setProperty("--lab-color",info.event.borderColor);}},
  eventClassNames:info=>!info.view.type.startsWith("list")&&bookingSpansDays(info.event)?["booking-multiday"]:[],
@@ -424,18 +461,8 @@ function initCalendar(){
   }catch(err){if(loadNumber===bookingLoadSequence)setText("calendarStatus","預約載入失敗："+readErrorText(err)+" 目前月曆不可用來判斷空檔。");failure(err)}
   finally{clearTimeout(slowTimer);if(loadNumber===bookingLoadSequence)document.getElementById("retryCalendar").disabled=false;}
  },
- eventClick:info=>{
-  document.querySelectorAll(".fc-popover .fc-popover-close").forEach(button=>button.click());
-  document.body.classList.add("booking-details-open");
-  const p=info.event.extendedProps,f=d=>d?d.toLocaleString("zh-TW",{hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
-  document.getElementById("modalLab").innerHTML=historyLabTag(p.lab||info.event.title.split(" - ")[0]);resetCancelPanel();setText("modalUser",p.user);
-  renderDetailWhen(info.event.start,info.event.end);
-  setText("modalPurpose",p.purpose||"無");setText("modalDevice",p.device||"無");setText("modalNote",p.note||"無");
-  const btn=document.getElementById("modalCancelBtn");
-  btn.disabled=!p.canCancel;btn.textContent=p.canCancel?"取消預約":"請聯繫管理員取消";
-  btn.onclick=()=>{if(p.canCancel)openCancelPanel(p.bookingId)};
-  const m=document.getElementById("detailsModal");m.classList.remove("hidden");m.classList.add("flex");
- }});
+ eventClick:openBookingDetails
+ });
  calendar.render();
 }
 async function retryCalendar(){
@@ -761,4 +788,14 @@ function movePickerMonth(delta){const d=new Date(pickerYear,pickerMonth+delta,1)
 function pickToday(){draftDate=taipeiToday();const [y,m]=dateParts(draftDate);pickerYear=y;pickerMonth=m-1;renderDatePicker();}
 function confirmDatePicker(){const input=document.getElementById(editingDate+'Date');input.value=draftDate;input.dispatchEvent(new Event('change',{bubbles:true}));refreshDateButtons();syncBookingTimes();document.getElementById('datePicker').close();}
 document.getElementById('bookingForm').addEventListener('reset',()=>{['start','end'].forEach(k=>document.getElementById(k+'Date').value='');refreshDateButtons();});
+
+// Explicit dismissal: close button, Escape, and a completed backdrop click.
+const dailyDialog=document.getElementById('dailyBookings');
+document.getElementById('dailyBookingClose').addEventListener('click',closeDailyBookings);
+dailyDialog.addEventListener('cancel',e=>{e.preventDefault();closeDailyBookings();});
+dailyDialog.addEventListener('close',()=>document.body.classList.remove('daily-bookings-open'));
+let dailyBackdropDown=false;
+function outsideDaily(e){const r=dailyDialog.getBoundingClientRect();return e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom;}
+dailyDialog.addEventListener('pointerdown',e=>{dailyBackdropDown=e.target===dailyDialog&&outsideDaily(e);});
+dailyDialog.addEventListener('click',e=>{if(dailyBackdropDown&&e.target===dailyDialog&&outsideDaily(e))closeDailyBookings();dailyBackdropDown=false;});
 </script><dialog id="bookingSuccess" aria-labelledby="bookingSuccessTitle" aria-describedby="bookingSuccessNote"><button type="button" class="success-close" aria-label="關閉預約成功通知" onclick="document.getElementById('bookingSuccess').close()">×</button><div class="success-heading"><span class="success-icon" aria-hidden="true">✓</span><h3 id="bookingSuccessTitle">預約成功</h3></div><dl id="bookingSuccessDetails" class="success-details"></dl><p id="bookingSuccessNote" class="success-note">進入實驗室時請於群組報到；使用藥劑後請另行登記。</p><div class="success-actions"><button type="button" class="success-main" onclick="finishBookingSuccess('calendar')">查看月曆</button><button type="button" onclick="finishBookingSuccess('form')">繼續預約</button></div><p class="success-cancel-note">如需取消，請點選月曆中的預約，輸入登記學號。</p></dialog><dialog id="chemicalSuccess" aria-labelledby="chemicalSuccessTitle"><button type="button" class="success-close" aria-label="關閉登記成功通知" onclick="document.getElementById('chemicalSuccess').close()">×</button><div class="success-heading"><span class="success-icon" aria-hidden="true">✓</span><h3 id="chemicalSuccessTitle">藥劑登記成功</h3><p>庫存已更新</p></div><div id="chemicalSuccessIdentity"></div><div id="chemicalSuccessItems" tabindex="0" aria-label="本次登記藥劑與用量"></div><div class="success-actions"><button type="button" class="success-main" onclick="finishChemicalSuccess('history')">查看紀錄</button><button type="button" onclick="finishChemicalSuccess('form')">繼續登記</button></div></dialog></body></html>
